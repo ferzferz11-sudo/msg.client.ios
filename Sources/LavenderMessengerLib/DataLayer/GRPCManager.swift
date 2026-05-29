@@ -1,12 +1,18 @@
 import Foundation
 import SwiftProtobuf
 import GRPCCore
+import GRPCProtobuf
+import GRPCNIOTransportHTTP2
 import NIOCore
 import NIOPosix
+import OSLog
 
-// MARK: - Device Helper
+// MARK: - Logger
 
-/// Provides device info without importing UIKit directly (compatible with SPM).
+private let logger = Logger(subsystem: "com.lavender.messenger", category: "GRPCManager")
+
+// MARK: - Device Info
+
 enum DeviceInfo {
     static var id: String {
         #if canImport(UIKit)
@@ -22,6 +28,14 @@ enum DeviceInfo {
         #else
         return "iOS Device"
         #endif
+    }
+}
+
+// MARK: - Client Version
+
+enum ClientVersion {
+    static var string: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.0"
     }
 }
 
@@ -53,7 +67,8 @@ final class GRPCManager: ObservableObject {
     private var currentDeviceName: String = ""
     private var isStreamAuthenticated: Bool = false
 
-    private var channel: GRPCChannel?
+    private var grpcClient: GRPCClient<HTTP2ClientTransport>?
+    private var eventLoopGroup: EventLoopGroup?
     private var chatTask: Task<Void, Never>?
     private var typingTask: Task<Void, Never>?
     private var typingContinuation: AsyncStream<Messenger_TypingRequest>.Continuation?
@@ -89,19 +104,40 @@ final class GRPCManager: ObservableObject {
         isSuperAdmin = false
 
         do {
-            let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-            channel = try GRPCChannelPool.with(
-                target: .host(serverAddress, port: port),
-                transportSecurity: useTLS ? .tls : .plaintext,
-                eventLoopGroup: eventLoopGroup
-            )
+            eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+
+            let transport: HTTP2ClientTransport
+            if useTLS {
+                transport = try HTTP2ClientTransport.tls(
+                    targeting: .host(serverAddress, port: port),
+                    eventLoopGroup: eventLoopGroup!
+                )
+            } else {
+                transport = try HTTP2ClientTransport.plaintext(
+                    targeting: .host(serverAddress, port: port),
+                    eventLoopGroup: eventLoopGroup!
+                )
+            }
+
+            grpcClient = GRPCClient(transport: transport)
             connectionStatus = .ready
+            logger.info("Connected to \(serverAddress):\(port)")
+
             if !currentUsername.isEmpty {
-                startChat(username: currentUsername, password: currentPassword, joinMessage: "", register: false, email: "", deviceId: currentDeviceId, deviceName: currentDeviceName)
+                startChat(
+                    username: currentUsername,
+                    password: currentPassword,
+                    joinMessage: "",
+                    register: false,
+                    email: "",
+                    deviceId: currentDeviceId,
+                    deviceName: currentDeviceName
+                )
             }
         } catch {
             connectionStatus = .failed
             self.error = "Connection failed: \(error.localizedDescription)"
+            logger.error("Connection failed: \(error.localizedDescription)")
             scheduleReconnect()
         }
     }
@@ -123,24 +159,39 @@ final class GRPCManager: ObservableObject {
         reconnectTask?.cancel()
         typingContinuation?.finish()
         typingContinuation = nil
-        channel = nil
+        grpcClient?.beginGracefulShutdown()
+        grpcClient = nil
+        try? eventLoopGroup?.syncShutdownGracefully()
+        eventLoopGroup = nil
         connectionStatus = .disconnected
         isStreamAuthenticated = false
         currentRoomId = ""
         messages = []
         typingUsers = [:]
+        logger.info("Disconnected")
     }
 
     // MARK: - Chat Auth + Stream
 
-    func startChat(username: String, password: String, joinMessage: String, register: Bool = false, email: String = "", deviceId: String = "", deviceName: String = "", onMessageReceived: @escaping (Message) -> Void = { _ in }) {
+    func startChat(
+        username: String,
+        password: String,
+        joinMessage: String,
+        register: Bool = false,
+        email: String = "",
+        deviceId: String = "",
+        deviceName: String = "",
+        onMessageReceived: @escaping (Message) -> Void = { _ in }
+    ) {
         currentUsername = username.trimmingCharacters(in: .whitespaces)
         currentPassword = password
         onMessageReceivedCallback = onMessageReceived
         authStatus = nil
 
-        guard let channel = channel else {
-            if !currentServerHost.isEmpty { connect(serverAddress: currentServerHost, port: currentServerPort) }
+        guard let client = grpcClient else {
+            if !currentServerHost.isEmpty {
+                connect(serverAddress: currentServerHost, port: currentServerPort)
+            }
             return
         }
         chatTask?.cancel()
@@ -154,7 +205,7 @@ final class GRPCManager: ObservableObject {
         authMsg.text = joinMessage
         authMsg.roomID = currentRoomId
         authMsg.register = register
-        authMsg.clientVersion = "1.1.0.0"
+        authMsg.clientVersion = ClientVersion.string
         authMsg.deviceID = did
         authMsg.deviceName = dname
         authMsg.createdAt = Google_Protobuf_Timestamp(date: Date())
@@ -166,20 +217,30 @@ final class GRPCManager: ObservableObject {
         chatTask = Task { [weak self] in
             guard let self = self else { return }
             do {
-                try await channel.withBidirectionalStreamingCall(
-                    method: Messenger_ChatService.Method.Chat,
-                    serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
-                    deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>()
-                ) { request in
-                    try await request.write(authMsg)
-                    for await message in stream { try await request.write(message) }
-                } onResponse: { response in
-                    for try await message in response.messages {
-                        await self.handleIncomingProtoMessage(message)
+                try await withGRPCClient(transport: client.transport) { grpcClient in
+                    try await grpcClient.bidirectionalStreaming(
+                        request: StreamingClientRequest(of: Messenger_Message.self) { writer in
+                            try await writer.write(authMsg)
+                            for await message in stream {
+                                try await writer.write(message)
+                            }
+                        },
+                        descriptor: Messenger_ChatService.Method.Chat.descriptor,
+                        serializer: ProtobufSerializer<Messenger_Message>(),
+                        deserializer: ProtobufDeserializer<Messenger_Message>(),
+                        options: .defaults
+                    ) { response in
+                        for try await message in response.messages {
+                            await self.handleIncomingProtoMessage(message)
+                        }
                     }
                 }
-            } catch is CancellationError {}
-            catch { Task { @MainActor in self.handleStreamError(error) } }
+            } catch is CancellationError {
+                logger.debug("Chat stream cancelled")
+            } catch {
+                logger.error("Chat stream error: \(error.localizedDescription)")
+                Task { @MainActor in self.handleStreamError(error) }
+            }
         }
         startTypingStream()
     }
@@ -192,7 +253,12 @@ final class GRPCManager: ObservableObject {
     }
 
     func sendTextMessage(text: String, roomId: String, repliedToMessageId: String = "", repliedToUser: String = "", repliedToText: String = "") {
-        sendMessage(Message(user: currentUsername, text: text, roomId: roomId, repliedToMessageId: repliedToMessageId, repliedToUser: repliedToUser, repliedToText: repliedToText, avatarUrl: avatarCache[currentUsername] ?? "", userId: currentUserId))
+        sendMessage(Message(
+            user: currentUsername, text: text, roomId: roomId,
+            repliedToMessageId: repliedToMessageId, repliedToUser: repliedToUser,
+            repliedToText: repliedToText, avatarUrl: avatarCache[currentUsername] ?? "",
+            userId: currentUserId
+        ))
     }
 
     private var chatMessageStream: AsyncStream<Messenger_Message>?
@@ -206,12 +272,12 @@ final class GRPCManager: ObservableObject {
 
     func setRoomId(_ roomId: String) {
         currentRoomId = roomId
-        guard !isStreamAuthenticated else { return }
+        guard isStreamAuthenticated else { return }
         var msg = Messenger_Message()
         msg.user = currentUsername
         msg.roomID = roomId
         msg.createdAt = Google_Protobuf_Timestamp(date: Date())
-        msg.clientVersion = "1.1.0.0"
+        msg.clientVersion = ClientVersion.string
         msg.deviceID = currentDeviceId
         msg.deviceName = currentDeviceName
         sendProtoMessage(msg)
@@ -227,28 +293,121 @@ final class GRPCManager: ObservableObject {
     // MARK: - History
 
     func loadHistory(roomId: String, completion: @escaping () -> Void = {}) {
-        guard let channel = channel else { completion(); return }
+        guard let client = grpcClient else { completion(); return }
         var request = Messenger_GetHistoryRequest()
         request.limit = 100
         request.room = roomId
         Task {
             do {
-                let response = try await channel.unary(
-                    method: Messenger_ChatService.Method.GetHistory,
-                    request: request,
-                    serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetHistoryRequest>(),
-                    deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetHistoryResponse>()
-                )
-                for protoMsg in try response.message.messages { await handleIncomingProtoMessage(protoMsg) }
-            } catch {}
+                let response = try await withGRPCClient(transport: client.transport) { grpcClient in
+                    try await grpcClient.unary(
+                        request: ClientRequest.single(request),
+                        descriptor: Messenger_ChatService.Method.GetHistory.descriptor,
+                        serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
+                        deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
+                        options: .defaults
+                    )
+                }
+                for protoMsg in try response.message.messages {
+                    await handleIncomingProtoMessage(protoMsg)
+                }
+            } catch {
+                logger.error("Failed to load history: \(error.localizedDescription)")
+            }
             completion()
         }
     }
 
-    // MARK: - Read Reactions Typing Stubs
+    // MARK: - Read Receipts
 
-    func markRead(roomId: String, username: String, completion: (() -> Void)? = nil) {}
-    func setReaction(messageId: String, username: String, emoji: String) {}
+    func markRead(roomId: String, username: String, completion: (() -> Void)? = nil) {
+        guard let client = grpcClient else { completion?(); return }
+        var request = Messenger_MarkReadRequest()
+        request.roomID = roomId
+        request.username = username
+        request.userID = currentUserId
+        Task {
+            do {
+                _ = try await withGRPCClient(transport: client.transport) { grpcClient in
+                    try await grpcClient.unary(
+                        request: ClientRequest.single(request),
+                        descriptor: Messenger_ChatService.Method.MarkRead.descriptor,
+                        serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
+                        deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
+                        options: .defaults
+                    )
+                }
+            } catch {
+                logger.error("Failed to mark read: \(error.localizedDescription)")
+            }
+            completion?()
+        }
+    }
+
+    // MARK: - Reactions
+
+    func setReaction(messageId: String, username: String, emoji: String) {
+        guard let client = grpcClient else { return }
+        var reaction = Messenger_Reaction()
+        reaction.user = username
+        reaction.emoji = emoji
+        var request = Messenger_ReactionRequest()
+        request.messageID = messageId
+        request.reaction = reaction
+        Task {
+            do {
+                _ = try await withGRPCClient(transport: client.transport) { grpcClient in
+                    try await grpcClient.unary(
+                        request: ClientRequest.single(request),
+                        descriptor: Messenger_ChatService.Method.SetReaction.descriptor,
+                        serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
+                        deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
+                        options: .defaults
+                    )
+                }
+            } catch {
+                logger.error("Failed to set reaction: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // MARK: - Typing Stream
+
+    private func startTypingStream() {
+        guard let client = grpcClient else { return }
+        typingTask?.cancel()
+
+        typingTask = Task { [weak self] in
+            guard let self = self else { return }
+            let (stream, continuation) = AsyncStream<Messenger_TypingRequest>.makeStream()
+            self.typingContinuation = continuation
+
+            do {
+                try await withGRPCClient(transport: client.transport) { grpcClient in
+                    try await grpcClient.bidirectionalStreaming(
+                        request: StreamingClientRequest(of: Messenger_TypingRequest.self) { writer in
+                            for await typingReq in stream {
+                                try await writer.write(typingReq)
+                            }
+                        },
+                        descriptor: Messenger_ChatService.Method.Typing.descriptor,
+                        serializer: ProtobufSerializer<Messenger_TypingRequest>(),
+                        deserializer: ProtobufDeserializer<Messenger_TypingSignal>(),
+                        options: .defaults
+                    ) { response in
+                        for try await signal in response.messages {
+                            await self.handleTypingSignal(signal)
+                        }
+                    }
+                }
+            } catch is CancellationError {
+                logger.debug("Typing stream cancelled")
+            } catch {
+                logger.error("Typing stream error: \(error.localizedDescription)")
+            }
+        }
+    }
+
     func sendTypingSignal(username: String, isTyping: Bool) {
         guard isStreamAuthenticated else { return }
         var req = Messenger_TypingRequest()
@@ -258,7 +417,6 @@ final class GRPCManager: ObservableObject {
         req.userID = currentUserId
         typingContinuation?.yield(req)
     }
-    private func startTypingStream() {}
 
     // MARK: - Unary RPC Stubs
 
@@ -306,7 +464,9 @@ final class GRPCManager: ObservableObject {
     func getSecretChatKey(chatId: String, completion: @escaping (String, Bool) -> Void = { _, _ in }) {}
     func sendE2EEMessage(chatId: String, encryptedPayload: String) {
         guard isStreamAuthenticated else { return }
-        var msg = Messenger_Message(); msg.user = currentUsername; msg.roomID = chatId; msg.isE2Ee = true; msg.e2EePayload = encryptedPayload; msg.createdAt = Google_Protobuf_Timestamp(date: Date())
+        var msg = Messenger_Message()
+        msg.user = currentUsername; msg.roomID = chatId; msg.isE2Ee = true
+        msg.e2EePayload = encryptedPayload; msg.createdAt = Google_Protobuf_Timestamp(date: Date())
         sendProtoMessage(msg)
     }
     func getFCMLogs(completion: @escaping ([FCMLogEntry]) -> Void = { _ in }) {}
@@ -314,7 +474,10 @@ final class GRPCManager: ObservableObject {
     func getUserId() -> String { currentUserId }
     func fetchUserId(username: String, completion: @escaping (String?, Bool) -> Void = { _, _ in }) {}
     func deleteProfile(username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
-    func updateAvatarCache(username: String, avatarUrl: String, fullAvatarUrl: String = "") { avatarCache[username] = avatarUrl; if !fullAvatarUrl.isEmpty { fullAvatarCache[username] = fullAvatarUrl } }
+    func updateAvatarCache(username: String, avatarUrl: String, fullAvatarUrl: String = "") {
+        avatarCache[username] = avatarUrl
+        if !fullAvatarUrl.isEmpty { fullAvatarCache[username] = fullAvatarUrl }
+    }
     func getAvatarCache() -> [String: String] { avatarCache }
     func getFullAvatarUrl(username: String) -> String? { fullAvatarCache[username] }
     func getCurrentUsername() -> String? { currentUsername.isEmpty ? nil : currentUsername }
@@ -327,43 +490,126 @@ final class GRPCManager: ObservableObject {
     }
 
     private func processIncoming(_ proto: Messenger_Message) {
-        if proto.isSuperAdmin || proto.text == "SET_SUPER_ADMIN" { if !isSuperAdmin { isSuperAdmin = true } }
+        if proto.isSuperAdmin || proto.text == "SET_SUPER_ADMIN" {
+            if !isSuperAdmin { isSuperAdmin = true }
+        }
         if proto.text == "SET_SUPER_ADMIN" { return }
+
         if proto.text == "AUTH_FAILED" || proto.text == "USER_NOT_FOUND" || proto.text == "REGISTRATION_SUCCESS" {
             authStatus = proto.text
-            if proto.text == "AUTH_FAILED" { isStreamAuthenticated = false; connectionStatus = .failed }
-            return
-        }
-        if proto.text.hasPrefix("SERVER_INFO:") { serverVersion = String(proto.text.dropFirst("SERVER_INFO:".count)); isStreamAuthenticated = true; return }
-        if proto.text == "FORCE_LOGOUT" { authStatus = "FORCE_LOGOUT"; disconnect(); return }
-        if proto.text.hasPrefix("FORCE_DISCONNECT:") { if String(proto.text.dropFirst("FORCE_DISCONNECT:".count)) == currentUsername { disconnect() }; return }
-        if proto.text.hasPrefix("FORCE_LOGOUT_EXCEPT:") { if String(proto.text.dropFirst("FORCE_LOGOUT_EXCEPT:".count)) != currentDeviceId { authStatus = "FORCE_LOGOUT"; disconnect() }; return }
-        if proto.text.hasPrefix("FORCE_DISCONNECT_DEVICE:") { if String(proto.text.dropFirst("FORCE_DISCONNECT_DEVICE:".count)) == currentDeviceId { authStatus = "FORCE_LOGOUT"; disconnect() }; return }
-        if proto.text.hasPrefix("SYSTEM_NOTIFICATION:") { systemNotification = String(proto.text.dropFirst("SYSTEM_NOTIFICATION:".count)); return }
-        if proto.text.hasPrefix("DELETE_MESSAGE:") { let id = String(proto.text.dropFirst("DELETE_MESSAGE:".count)); deletedMessageIds.insert(id); messages.removeAll { $0.id == id }; return }
-        if proto.text.hasPrefix("CHAT_DELETED:") { chatDeletedEvent = String(proto.text.dropFirst("CHAT_DELETED:".count)); return }
-        if proto.text.hasPrefix("READ_ALL:") {
-            if proto.roomID.isEmpty || proto.roomID == currentRoomId {
-                for i in messages.indices { messages[i] = Message(id: messages[i].id, user: messages[i].user, text: messages[i].text, timestamp: messages[i].timestamp, reactions: messages[i].reactions, repliedToMessageId: messages[i].repliedToMessageId, repliedToUser: messages[i].repliedToUser, repliedToText: messages[i].repliedToText, roomId: messages[i].roomId, isRead: true, avatarUrl: messages[i].avatarUrl, imageUrl: messages[i].imageUrl, imageUrls: messages[i].imageUrls, edited: messages[i].edited, isSuperAdmin: messages[i].isSuperAdmin, voiceUrl: messages[i].voiceUrl, duration: messages[i].duration, userId: messages[i].userId, isE2EE: messages[i].isE2EE, e2eePayload: messages[i].e2eePayload) }
+            if proto.text == "AUTH_FAILED" {
+                isStreamAuthenticated = false
+                connectionStatus = .failed
             }
             return
         }
-        if proto.text.hasPrefix("CLEAR_CACHE:") { if String(proto.text.dropFirst("CLEAR_CACHE:".count)) == currentRoomId { messages = [] }; return }
-        if proto.text.hasPrefix("ONLINE_USERS_UPDATE:") {
-            let json = String(proto.text.dropFirst("ONLINE_USERS_UPDATE:".count))
-            if let data = json.data(using: .utf8), let users = try? JSONDecoder().decode([String].self, from: data) { onlineUsers = users }
+
+        if proto.text.hasPrefix("SERVER_INFO:") {
+            serverVersion = String(proto.text.dropFirst("SERVER_INFO:".count))
+            isStreamAuthenticated = true
             return
         }
+
+        if proto.text == "FORCE_LOGOUT" { authStatus = "FORCE_LOGOUT"; disconnect(); return }
+        if proto.text.hasPrefix("FORCE_DISCONNECT:") {
+            if String(proto.text.dropFirst("FORCE_DISCONNECT:".count)) == currentUsername { disconnect() }
+            return
+        }
+        if proto.text.hasPrefix("FORCE_LOGOUT_EXCEPT:") {
+            if String(proto.text.dropFirst("FORCE_LOGOUT_EXCEPT:".count)) != currentDeviceId {
+                authStatus = "FORCE_LOGOUT"; disconnect()
+            }
+            return
+        }
+        if proto.text.hasPrefix("FORCE_DISCONNECT_DEVICE:") {
+            if String(proto.text.dropFirst("FORCE_DISCONNECT_DEVICE:".count)) == currentDeviceId {
+                authStatus = "FORCE_LOGOUT"; disconnect()
+            }
+            return
+        }
+        if proto.text.hasPrefix("SYSTEM_NOTIFICATION:") {
+            systemNotification = String(proto.text.dropFirst("SYSTEM_NOTIFICATION:".count))
+            return
+        }
+        if proto.text.hasPrefix("DELETE_MESSAGE:") {
+            let id = String(proto.text.dropFirst("DELETE_MESSAGE:".count))
+            deletedMessageIds.insert(id)
+            messages.removeAll { $0.id == id }
+            return
+        }
+        if proto.text.hasPrefix("CHAT_DELETED:") {
+            chatDeletedEvent = String(proto.text.dropFirst("CHAT_DELETED:".count))
+            return
+        }
+        if proto.text.hasPrefix("READ_ALL:") {
+            if proto.roomID.isEmpty || proto.roomID == currentRoomId {
+                for i in messages.indices {
+                    messages[i] = Message(
+                        id: messages[i].id, user: messages[i].user, text: messages[i].text,
+                        timestamp: messages[i].timestamp, reactions: messages[i].reactions,
+                        repliedToMessageId: messages[i].repliedToMessageId, repliedToUser: messages[i].repliedToUser,
+                        repliedToText: messages[i].repliedToText, roomId: messages[i].roomId,
+                        isRead: true, avatarUrl: messages[i].avatarUrl, imageUrl: messages[i].imageUrl,
+                        imageUrls: messages[i].imageUrls, edited: messages[i].edited,
+                        isSuperAdmin: messages[i].isSuperAdmin, voiceUrl: messages[i].voiceUrl,
+                        duration: messages[i].duration, userId: messages[i].userId,
+                        isE2EE: messages[i].isE2EE, e2eePayload: messages[i].e2eePayload
+                    )
+                }
+            }
+            return
+        }
+        if proto.text.hasPrefix("CLEAR_CACHE:") {
+            if String(proto.text.dropFirst("CLEAR_CACHE:".count)) == currentRoomId { messages = [] }
+            return
+        }
+        if proto.text.hasPrefix("ONLINE_USERS_UPDATE:") {
+            let json = String(proto.text.dropFirst("ONLINE_USERS_UPDATE:".count))
+            if let data = json.data(using: .utf8),
+               let users = try? JSONDecoder().decode([String].self, from: data) {
+                onlineUsers = users
+            }
+            return
+        }
+
         let message = ProtoUtils.protoToMessage(proto)
-        if deletedMessageIds.contains(message.id) { deletedMessageIds.remove(message.id); return }
+        if deletedMessageIds.contains(message.id) {
+            deletedMessageIds.remove(message.id)
+            return
+        }
         messages.append(message)
         onMessageReceivedCallback?(message)
     }
+
+    // MARK: - Typing Signal
+
+    private func handleTypingSignal(_ signal: Messenger_TypingSignal) async {
+        await MainActor.run {
+            let roomId = signal.roomID
+            let username = signal.username
+            if signal.isTyping {
+                var users = self.typingUsers[roomId] ?? Set<String>()
+                users.insert(username)
+                self.typingUsers[roomId] = users
+            } else {
+                var users = self.typingUsers[roomId] ?? Set<String>()
+                users.remove(username)
+                if users.isEmpty {
+                    self.typingUsers.removeValue(forKey: roomId)
+                } else {
+                    self.typingUsers[roomId] = users
+                }
+            }
+        }
+    }
+
+    // MARK: - Stream Error
 
     private func handleStreamError(_ error: Error) {
         connectionStatus = .failed
         self.error = "Stream error: \(error.localizedDescription)"
         isStreamAuthenticated = false
+        logger.error("Stream error: \(error.localizedDescription)")
         scheduleReconnect()
     }
 }

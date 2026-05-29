@@ -8,13 +8,16 @@ options:
 packages:
   grpc-swift:
     url: https://github.com/grpc/grpc-swift.git
-    from: "2.1.0"
+    from: "2.0.0"
+  grpc-swift-nio-transport:
+    url: https://github.com/grpc/grpc-swift-nio-transport.git
+    from: "1.0.0"
+  grpc-swift-protobuf:
+    url: https://github.com/grpc/grpc-swift-protobuf.git
+    from: "1.0.0"
   swift-protobuf:
     url: https://github.com/apple/swift-protobuf.git
     from: "1.28.0"
-  swift-nio:
-    url: https://github.com/apple/swift-nio.git
-    from: "2.70.0"
 
 targets:
   LavenderMessenger:
@@ -23,17 +26,15 @@ targets:
     sources:
       - LavenderMessengerApp.swift
       - path: Sources/LavenderMessengerLib
-        excludes:
-          - LavenderMessengerApp.swift
     dependencies:
       - package: grpc-swift
         product: GRPCCore
+      - package: grpc-swift-nio-transport
+        product: GRPCNIOTransportHTTP2
+      - package: grpc-swift-protobuf
+        product: GRPCProtobuf
       - package: swift-protobuf
         product: SwiftProtobuf
-      - package: swift-nio
-        product: NIOCore
-      - package: swift-nio
-        product: NIOPosix
     settings:
       base:
         SWIFT_VERSION: "5.10"
