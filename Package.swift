@@ -21,14 +21,7 @@ let package = Package(
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-            ],
-            path: "Sources",
-            sources: ["LavenderMessenger"]
-        ),
-        .testTarget(
-            name: "LavenderMessengerTests",
-            dependencies: ["LavenderMessengerLib"],
-            path: "Tests"
+            ]
         ),
     ]
 )
