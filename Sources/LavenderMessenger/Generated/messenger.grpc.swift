@@ -3223,8 +3223,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
     internal func registerMethods<Transport>(with router: inout GRPCCore.RPCRouter<Transport>) where Transport: GRPCCore.ServerTransport {
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.Chat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
+            deserializer: ProtobufDeserializer<Messenger_Message>(),
+            serializer: ProtobufSerializer<Messenger_Message>(),
             handler: { request, context in
                 try await self.chat(
                     request: request,
@@ -3234,8 +3234,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.Typing.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_TypingRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_TypingSignal>(),
+            deserializer: ProtobufDeserializer<Messenger_TypingRequest>(),
+            serializer: ProtobufSerializer<Messenger_TypingSignal>(),
             handler: { request, context in
                 try await self.typing(
                     request: request,
@@ -3245,8 +3245,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.CallSession.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CallMessage>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CallMessage>(),
+            deserializer: ProtobufDeserializer<Messenger_CallMessage>(),
+            serializer: ProtobufSerializer<Messenger_CallMessage>(),
             handler: { request, context in
                 try await self.callSession(
                     request: request,
@@ -3256,8 +3256,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetClients.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ClientListRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ClientListResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_ClientListRequest>(),
+            serializer: ProtobufSerializer<Messenger_ClientListResponse>(),
             handler: { request, context in
                 try await self.getClients(
                     request: request,
@@ -3267,8 +3267,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetAllUsers.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetAllUsersRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetAllUsersResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetAllUsersRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetAllUsersResponse>(),
             handler: { request, context in
                 try await self.getAllUsers(
                     request: request,
@@ -3278,8 +3278,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetAllChats.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetAllChatsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetAllChatsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetAllChatsRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetAllChatsResponse>(),
             handler: { request, context in
                 try await self.getAllChats(
                     request: request,
@@ -3289,8 +3289,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetHistory.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetHistoryRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetHistoryResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetHistoryRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetHistoryResponse>(),
             handler: { request, context in
                 try await self.getHistory(
                     request: request,
@@ -3300,8 +3300,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SetReaction.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ReactionRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ReactionResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_ReactionRequest>(),
+            serializer: ProtobufSerializer<Messenger_ReactionResponse>(),
             handler: { request, context in
                 try await self.setReaction(
                     request: request,
@@ -3311,8 +3311,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteMessages.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteMessagesRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteMessagesResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteMessagesRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteMessagesResponse>(),
             handler: { request, context in
                 try await self.deleteMessages(
                     request: request,
@@ -3322,8 +3322,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.RegisterToken.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_TokenRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_TokenResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_TokenRequest>(),
+            serializer: ProtobufSerializer<Messenger_TokenResponse>(),
             handler: { request, context in
                 try await self.registerToken(
                     request: request,
@@ -3333,8 +3333,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetChats.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetChatsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetChatsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetChatsRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetChatsResponse>(),
             handler: { request, context in
                 try await self.getChats(
                     request: request,
@@ -3344,8 +3344,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetChatListVersion.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetChatListVersionRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetChatListVersionResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetChatListVersionRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetChatListVersionResponse>(),
             handler: { request, context in
                 try await self.getChatListVersion(
                     request: request,
@@ -3355,8 +3355,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.CreateDirectChat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateDirectChatRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateDirectChatResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateDirectChatRequest>(),
+            serializer: ProtobufSerializer<Messenger_CreateDirectChatResponse>(),
             handler: { request, context in
                 try await self.createDirectChat(
                     request: request,
@@ -3366,8 +3366,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.CreateGroupChat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateGroupChatRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateGroupChatResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateGroupChatRequest>(),
+            serializer: ProtobufSerializer<Messenger_CreateGroupChatResponse>(),
             handler: { request, context in
                 try await self.createGroupChat(
                     request: request,
@@ -3377,8 +3377,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateUsername.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateUsernameRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateUsernameResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateUsernameRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateUsernameResponse>(),
             handler: { request, context in
                 try await self.updateUsername(
                     request: request,
@@ -3388,8 +3388,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdatePassword.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdatePasswordRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdatePasswordResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdatePasswordRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdatePasswordResponse>(),
             handler: { request, context in
                 try await self.updatePassword(
                     request: request,
@@ -3399,8 +3399,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.AdminUpdatePassword.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AdminUpdatePasswordRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AdminUpdatePasswordResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_AdminUpdatePasswordRequest>(),
+            serializer: ProtobufSerializer<Messenger_AdminUpdatePasswordResponse>(),
             handler: { request, context in
                 try await self.adminUpdatePassword(
                     request: request,
@@ -3410,8 +3410,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.MarkRead.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_MarkReadRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_MarkReadResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_MarkReadRequest>(),
+            serializer: ProtobufSerializer<Messenger_MarkReadResponse>(),
             handler: { request, context in
                 try await self.markRead(
                     request: request,
@@ -3421,8 +3421,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateAvatar.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateAvatarRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateAvatarResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateAvatarRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateAvatarResponse>(),
             handler: { request, context in
                 try await self.updateAvatar(
                     request: request,
@@ -3432,8 +3432,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateProfile.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateProfileRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateProfileResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateProfileRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateProfileResponse>(),
             handler: { request, context in
                 try await self.updateProfile(
                     request: request,
@@ -3443,8 +3443,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetUserProfile.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserProfileRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserProfileResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserProfileRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetUserProfileResponse>(),
             handler: { request, context in
                 try await self.getUserProfile(
                     request: request,
@@ -3454,8 +3454,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetUserAvatar.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserAvatarRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserAvatarResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserAvatarRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetUserAvatarResponse>(),
             handler: { request, context in
                 try await self.getUserAvatar(
                     request: request,
@@ -3465,8 +3465,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.AddParticipant.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddParticipantRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddParticipantResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_AddParticipantRequest>(),
+            serializer: ProtobufSerializer<Messenger_AddParticipantResponse>(),
             handler: { request, context in
                 try await self.addParticipant(
                     request: request,
@@ -3476,8 +3476,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.RemoveParticipant.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveParticipantRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveParticipantResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveParticipantRequest>(),
+            serializer: ProtobufSerializer<Messenger_RemoveParticipantResponse>(),
             handler: { request, context in
                 try await self.removeParticipant(
                     request: request,
@@ -3487,8 +3487,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.EditMessage.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_EditMessageRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_EditMessageResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_EditMessageRequest>(),
+            serializer: ProtobufSerializer<Messenger_EditMessageResponse>(),
             handler: { request, context in
                 try await self.editMessage(
                     request: request,
@@ -3498,8 +3498,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateChatName.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatNameRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatNameResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatNameRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatNameResponse>(),
             handler: { request, context in
                 try await self.updateChatName(
                     request: request,
@@ -3509,8 +3509,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateChatAvatar.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatAvatarRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatAvatarResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatAvatarRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatAvatarResponse>(),
             handler: { request, context in
                 try await self.updateChatAvatar(
                     request: request,
@@ -3520,8 +3520,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.UpdateChatSettings.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatSettingsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatSettingsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatSettingsRequest>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatSettingsResponse>(),
             handler: { request, context in
                 try await self.updateChatSettings(
                     request: request,
@@ -3531,8 +3531,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteChat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteChatRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteChatResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteChatRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteChatResponse>(),
             handler: { request, context in
                 try await self.deleteChat(
                     request: request,
@@ -3542,8 +3542,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteProfile.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteProfileRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteProfileResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteProfileRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteProfileResponse>(),
             handler: { request, context in
                 try await self.deleteProfile(
                     request: request,
@@ -3553,8 +3553,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.AddContact.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddContactRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddContactResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_AddContactRequest>(),
+            serializer: ProtobufSerializer<Messenger_AddContactResponse>(),
             handler: { request, context in
                 try await self.addContact(
                     request: request,
@@ -3564,8 +3564,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.RemoveContact.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveContactRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveContactResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveContactRequest>(),
+            serializer: ProtobufSerializer<Messenger_RemoveContactResponse>(),
             handler: { request, context in
                 try await self.removeContact(
                     request: request,
@@ -3575,8 +3575,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetContacts.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetContactsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetContactsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetContactsRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetContactsResponse>(),
             handler: { request, context in
                 try await self.getContacts(
                     request: request,
@@ -3586,8 +3586,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetThemes.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetThemesRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetThemesResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetThemesRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetThemesResponse>(),
             handler: { request, context in
                 try await self.getThemes(
                     request: request,
@@ -3597,8 +3597,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SaveTheme.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SaveThemeRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SaveThemeResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_SaveThemeRequest>(),
+            serializer: ProtobufSerializer<Messenger_SaveThemeResponse>(),
             handler: { request, context in
                 try await self.saveTheme(
                     request: request,
@@ -3608,8 +3608,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SetCurrentTheme.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SetCurrentThemeRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SetCurrentThemeResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_SetCurrentThemeRequest>(),
+            serializer: ProtobufSerializer<Messenger_SetCurrentThemeResponse>(),
             handler: { request, context in
                 try await self.setCurrentTheme(
                     request: request,
@@ -3619,8 +3619,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteTheme.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteThemeRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteThemeResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteThemeRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteThemeResponse>(),
             handler: { request, context in
                 try await self.deleteTheme(
                     request: request,
@@ -3630,8 +3630,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetFCMLogs.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetFCMLogsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetFCMLogsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetFCMLogsRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetFCMLogsResponse>(),
             handler: { request, context in
                 try await self.getFCMLogs(
                     request: request,
@@ -3641,8 +3641,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SaveDraft.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SaveDraftRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SaveDraftResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_SaveDraftRequest>(),
+            serializer: ProtobufSerializer<Messenger_SaveDraftResponse>(),
             handler: { request, context in
                 try await self.saveDraft(
                     request: request,
@@ -3652,8 +3652,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetDraft.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetDraftRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetDraftResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetDraftRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetDraftResponse>(),
             handler: { request, context in
                 try await self.getDraft(
                     request: request,
@@ -3663,8 +3663,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteDraft.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDraftRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDraftResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDraftRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDraftResponse>(),
             handler: { request, context in
                 try await self.deleteDraft(
                     request: request,
@@ -3674,8 +3674,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetMutedChats.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetMutedChatsRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetMutedChatsResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetMutedChatsRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetMutedChatsResponse>(),
             handler: { request, context in
                 try await self.getMutedChats(
                     request: request,
@@ -3685,8 +3685,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SetMutedChat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SetMutedChatRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SetMutedChatResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_SetMutedChatRequest>(),
+            serializer: ProtobufSerializer<Messenger_SetMutedChatResponse>(),
             handler: { request, context in
                 try await self.setMutedChat(
                     request: request,
@@ -3696,8 +3696,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetUserId.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserIdRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserIdResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserIdRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetUserIdResponse>(),
             handler: { request, context in
                 try await self.getUserId(
                     request: request,
@@ -3707,8 +3707,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.AddFavorite.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddFavoriteRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddFavoriteResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_AddFavoriteRequest>(),
+            serializer: ProtobufSerializer<Messenger_AddFavoriteResponse>(),
             handler: { request, context in
                 try await self.addFavorite(
                     request: request,
@@ -3718,8 +3718,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.RemoveFavorite.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveFavoriteRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveFavoriteResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveFavoriteRequest>(),
+            serializer: ProtobufSerializer<Messenger_RemoveFavoriteResponse>(),
             handler: { request, context in
                 try await self.removeFavorite(
                     request: request,
@@ -3729,8 +3729,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetFavorites.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetFavoritesRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetFavoritesResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetFavoritesRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetFavoritesResponse>(),
             handler: { request, context in
                 try await self.getFavorites(
                     request: request,
@@ -3740,8 +3740,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.SaveFavoriteMessage.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddFavoriteResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_Message>(),
+            serializer: ProtobufSerializer<Messenger_AddFavoriteResponse>(),
             handler: { request, context in
                 try await self.saveFavoriteMessage(
                     request: request,
@@ -3751,8 +3751,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetDevices.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetDevicesRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetDevicesResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetDevicesRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetDevicesResponse>(),
             handler: { request, context in
                 try await self.getDevices(
                     request: request,
@@ -3762,8 +3762,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteDevice.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDeviceRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDeviceResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDeviceRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDeviceResponse>(),
             handler: { request, context in
                 try await self.deleteDevice(
                     request: request,
@@ -3773,8 +3773,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.DeleteOtherDevices.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDeviceRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDeviceResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDeviceRequest>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDeviceResponse>(),
             handler: { request, context in
                 try await self.deleteOtherDevices(
                     request: request,
@@ -3784,8 +3784,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.RequestPasswordReset.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RequestPasswordResetRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RequestPasswordResetResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_RequestPasswordResetRequest>(),
+            serializer: ProtobufSerializer<Messenger_RequestPasswordResetResponse>(),
             handler: { request, context in
                 try await self.requestPasswordReset(
                     request: request,
@@ -3795,8 +3795,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.ResetPassword.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ResetPasswordRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ResetPasswordResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_ResetPasswordRequest>(),
+            serializer: ProtobufSerializer<Messenger_ResetPasswordResponse>(),
             handler: { request, context in
                 try await self.resetPassword(
                     request: request,
@@ -3806,8 +3806,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.CreateSecretChat.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateSecretChatRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateSecretChatResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateSecretChatRequest>(),
+            serializer: ProtobufSerializer<Messenger_CreateSecretChatResponse>(),
             handler: { request, context in
                 try await self.createSecretChat(
                     request: request,
@@ -3817,8 +3817,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.ExchangeSecretKey.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ExchangeSecretKeyRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ExchangeSecretKeyResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_ExchangeSecretKeyRequest>(),
+            serializer: ProtobufSerializer<Messenger_ExchangeSecretKeyResponse>(),
             handler: { request, context in
                 try await self.exchangeSecretKey(
                     request: request,
@@ -3828,8 +3828,8 @@ extension Messenger_ChatService.StreamingServiceProtocol {
         )
         router.registerHandler(
             forMethod: Messenger_ChatService.Method.GetSecretChatKey.descriptor,
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetSecretChatKeyRequest>(),
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetSecretChatKeyResponse>(),
+            deserializer: ProtobufDeserializer<Messenger_GetSecretChatKeyRequest>(),
+            serializer: ProtobufSerializer<Messenger_GetSecretChatKeyResponse>(),
             handler: { request, context in
                 try await self.getSecretChatKey(
                     request: request,
@@ -7964,8 +7964,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.chat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>(),
+            serializer: ProtobufSerializer<Messenger_Message>(),
+            deserializer: ProtobufDeserializer<Messenger_Message>(),
             options: options,
             onResponse: handleResponse
         )
@@ -7987,8 +7987,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.typing(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_TypingRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_TypingSignal>(),
+            serializer: ProtobufSerializer<Messenger_TypingRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_TypingSignal>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8010,8 +8010,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.callSession(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CallMessage>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CallMessage>(),
+            serializer: ProtobufSerializer<Messenger_CallMessage>(),
+            deserializer: ProtobufDeserializer<Messenger_CallMessage>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8035,8 +8035,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getClients(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ClientListRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ClientListResponse>(),
+            serializer: ProtobufSerializer<Messenger_ClientListRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_ClientListResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8060,8 +8060,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getAllUsers(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetAllUsersRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetAllUsersResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetAllUsersRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetAllUsersResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8085,8 +8085,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getAllChats(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetAllChatsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetAllChatsResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetAllChatsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetAllChatsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8110,8 +8110,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getHistory(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetHistoryRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetHistoryResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8135,8 +8135,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.setReaction(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ReactionRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ReactionResponse>(),
+            serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8160,8 +8160,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteMessages(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteMessagesRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteMessagesResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteMessagesRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteMessagesResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8185,8 +8185,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.registerToken(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_TokenRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_TokenResponse>(),
+            serializer: ProtobufSerializer<Messenger_TokenRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_TokenResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8210,8 +8210,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getChats(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetChatsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetChatsResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetChatsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetChatsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8235,8 +8235,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getChatListVersion(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetChatListVersionRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetChatListVersionResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetChatListVersionRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetChatListVersionResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8260,8 +8260,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.createDirectChat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateDirectChatRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateDirectChatResponse>(),
+            serializer: ProtobufSerializer<Messenger_CreateDirectChatRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateDirectChatResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8285,8 +8285,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.createGroupChat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateGroupChatRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateGroupChatResponse>(),
+            serializer: ProtobufSerializer<Messenger_CreateGroupChatRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateGroupChatResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8310,8 +8310,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateUsername(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateUsernameRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateUsernameResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateUsernameRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateUsernameResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8335,8 +8335,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updatePassword(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdatePasswordRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdatePasswordResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdatePasswordRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdatePasswordResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8360,8 +8360,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.adminUpdatePassword(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AdminUpdatePasswordRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AdminUpdatePasswordResponse>(),
+            serializer: ProtobufSerializer<Messenger_AdminUpdatePasswordRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_AdminUpdatePasswordResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8385,8 +8385,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.markRead(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_MarkReadRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_MarkReadResponse>(),
+            serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8410,8 +8410,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateAvatar(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateAvatarRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateAvatarResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateAvatarRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateAvatarResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8435,8 +8435,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateProfile(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateProfileRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateProfileResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateProfileRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateProfileResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8460,8 +8460,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getUserProfile(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserProfileRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserProfileResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetUserProfileRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserProfileResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8485,8 +8485,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getUserAvatar(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserAvatarRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserAvatarResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetUserAvatarRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserAvatarResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8510,8 +8510,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.addParticipant(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddParticipantRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddParticipantResponse>(),
+            serializer: ProtobufSerializer<Messenger_AddParticipantRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_AddParticipantResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8535,8 +8535,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.removeParticipant(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveParticipantRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveParticipantResponse>(),
+            serializer: ProtobufSerializer<Messenger_RemoveParticipantRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveParticipantResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8560,8 +8560,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.editMessage(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_EditMessageRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_EditMessageResponse>(),
+            serializer: ProtobufSerializer<Messenger_EditMessageRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_EditMessageResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8585,8 +8585,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateChatName(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatNameRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatNameResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatNameRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatNameResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8610,8 +8610,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateChatAvatar(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatAvatarRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatAvatarResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatAvatarRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatAvatarResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8635,8 +8635,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.updateChatSettings(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_UpdateChatSettingsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_UpdateChatSettingsResponse>(),
+            serializer: ProtobufSerializer<Messenger_UpdateChatSettingsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_UpdateChatSettingsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8660,8 +8660,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteChat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteChatRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteChatResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteChatRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteChatResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8685,8 +8685,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteProfile(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteProfileRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteProfileResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteProfileRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteProfileResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8710,8 +8710,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.addContact(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddContactRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddContactResponse>(),
+            serializer: ProtobufSerializer<Messenger_AddContactRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_AddContactResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8735,8 +8735,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.removeContact(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveContactRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveContactResponse>(),
+            serializer: ProtobufSerializer<Messenger_RemoveContactRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveContactResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8760,8 +8760,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getContacts(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetContactsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetContactsResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetContactsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetContactsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8785,8 +8785,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getThemes(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetThemesRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetThemesResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetThemesRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetThemesResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8810,8 +8810,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.saveTheme(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SaveThemeRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SaveThemeResponse>(),
+            serializer: ProtobufSerializer<Messenger_SaveThemeRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_SaveThemeResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8835,8 +8835,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.setCurrentTheme(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SetCurrentThemeRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SetCurrentThemeResponse>(),
+            serializer: ProtobufSerializer<Messenger_SetCurrentThemeRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_SetCurrentThemeResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8860,8 +8860,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteTheme(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteThemeRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteThemeResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteThemeRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteThemeResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8885,8 +8885,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getFCMLogs(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetFCMLogsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetFCMLogsResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetFCMLogsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetFCMLogsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8910,8 +8910,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.saveDraft(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SaveDraftRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SaveDraftResponse>(),
+            serializer: ProtobufSerializer<Messenger_SaveDraftRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_SaveDraftResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8935,8 +8935,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getDraft(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetDraftRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetDraftResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetDraftRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetDraftResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8960,8 +8960,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteDraft(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDraftRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDraftResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDraftRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDraftResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -8985,8 +8985,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getMutedChats(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetMutedChatsRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetMutedChatsResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetMutedChatsRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetMutedChatsResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9010,8 +9010,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.setMutedChat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_SetMutedChatRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_SetMutedChatResponse>(),
+            serializer: ProtobufSerializer<Messenger_SetMutedChatRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_SetMutedChatResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9035,8 +9035,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getUserId(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetUserIdRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetUserIdResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetUserIdRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetUserIdResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9060,8 +9060,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.addFavorite(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_AddFavoriteRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddFavoriteResponse>(),
+            serializer: ProtobufSerializer<Messenger_AddFavoriteRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_AddFavoriteResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9085,8 +9085,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.removeFavorite(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RemoveFavoriteRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RemoveFavoriteResponse>(),
+            serializer: ProtobufSerializer<Messenger_RemoveFavoriteRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_RemoveFavoriteResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9110,8 +9110,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getFavorites(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetFavoritesRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetFavoritesResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetFavoritesRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetFavoritesResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9135,8 +9135,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.saveFavoriteMessage(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_AddFavoriteResponse>(),
+            serializer: ProtobufSerializer<Messenger_Message>(),
+            deserializer: ProtobufDeserializer<Messenger_AddFavoriteResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9160,8 +9160,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getDevices(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetDevicesRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetDevicesResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetDevicesRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetDevicesResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9185,8 +9185,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteDevice(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDeviceRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDeviceResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDeviceRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDeviceResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9210,8 +9210,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.deleteOtherDevices(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_DeleteDeviceRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_DeleteDeviceResponse>(),
+            serializer: ProtobufSerializer<Messenger_DeleteDeviceRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_DeleteDeviceResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9235,8 +9235,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.requestPasswordReset(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_RequestPasswordResetRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_RequestPasswordResetResponse>(),
+            serializer: ProtobufSerializer<Messenger_RequestPasswordResetRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_RequestPasswordResetResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9260,8 +9260,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.resetPassword(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ResetPasswordRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ResetPasswordResponse>(),
+            serializer: ProtobufSerializer<Messenger_ResetPasswordRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_ResetPasswordResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9289,8 +9289,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.createSecretChat(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_CreateSecretChatRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_CreateSecretChatResponse>(),
+            serializer: ProtobufSerializer<Messenger_CreateSecretChatRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_CreateSecretChatResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9314,8 +9314,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.exchangeSecretKey(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_ExchangeSecretKeyRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_ExchangeSecretKeyResponse>(),
+            serializer: ProtobufSerializer<Messenger_ExchangeSecretKeyRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_ExchangeSecretKeyResponse>(),
             options: options,
             onResponse: handleResponse
         )
@@ -9339,8 +9339,8 @@ extension Messenger_ChatService.ClientProtocol {
     ) async throws -> Result where Result: Sendable {
         try await self.getSecretChatKey(
             request: request,
-            serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetSecretChatKeyRequest>(),
-            deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetSecretChatKeyResponse>(),
+            serializer: ProtobufSerializer<Messenger_GetSecretChatKeyRequest>(),
+            deserializer: ProtobufDeserializer<Messenger_GetSecretChatKeyResponse>(),
             options: options,
             onResponse: handleResponse
         )

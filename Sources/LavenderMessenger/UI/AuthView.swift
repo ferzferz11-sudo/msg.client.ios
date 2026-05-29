@@ -46,7 +46,7 @@ struct AuthView: View {
                 }
                 .padding(.horizontal, 24)
             }
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
             .alert("Error", isPresented: $viewModel.showError) {
                 Button("OK", role: .cancel) {}
             } message: {

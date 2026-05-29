@@ -2,8 +2,7 @@ import SwiftUI
 
 // MARK: - LavenderMessengerApp
 
-/// Main app entry point.
-/// Uses @StateObject for global AuthViewModel to persist auth state across views.
+@available(iOS 17.0, *)
 @main
 struct LavenderMessengerApp: App {
 
