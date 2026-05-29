@@ -39,3 +39,7 @@ targets:
       base:
         SWIFT_VERSION: "5.10"
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.lavender.LavenderMessenger"
+        CODE_SIGN_STYLE: "Automatic"
+        DEVELOPMENT_TEAM: ""
