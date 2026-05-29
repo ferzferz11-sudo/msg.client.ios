@@ -2,7 +2,7 @@ import Foundation
 import SwiftProtobuf
 import GRPCCore
 import GRPCProtobuf
-import GRPCNIOTransportHTTP2
+import GRPCNIOTransportHTTP2Posix
 import NIOCore
 import NIOPosix
 import OSLog

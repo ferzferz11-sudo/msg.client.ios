@@ -42,4 +42,3 @@ targets:
         GENERATE_INFOPLIST_FILE: "YES"
         PRODUCT_BUNDLE_IDENTIFIER: "com.lavender.LavenderMessenger"
         CODE_SIGN_STYLE: "Automatic"
-        DEVELOPMENT_TEAM: ""
