@@ -3,8 +3,8 @@
 > **A secure messaging application** — SwiftUI + gRPC + AES-256 encryption
 
 [![Platform](https://img.shields.io/badge/platform-iOS%2017%2B-blue)](https://developer.apple.com/ios/)
-[![Swift](https://img.shields.io/badge/Swift%205.10-orange)](https://swift.org/)
-[![gRPC](https://img.shields.io/badge/gRPC-Swift-green)](https://github.com/grpc/grpc-swift)
+[![Swift](https://img.shields.io/badge/Swift%206.0-orange)](https://swift.org/)
+[![gRPC](https://img.shields.io/badge/gRPC%20Swift%202.x-green)](https://github.com/grpc/grpc-swift)
 [![License](https://img.shields.io/badge/license-Proprietary-lightgrey)](LICENSE)
 
 ---
@@ -19,7 +19,19 @@ Lavender Messenger is a cross-platform secure messaging application. This is the
 ┌─────────────────────────────────────────────────┐
 │                   UI Layer                       │
 │  AuthView → MainTabView → ChatRoomView          │
-│  (SwiftUI Views + ViewModels)                   │
+│  ├── Components/                                │
+│  │   ├── MessageBubbleView                      │
+│  │   ├── ReactionPickerView                     │
+│  │   ├── TypingIndicatorView                    │
+│  │   ├── ReplyPreviewView                       │
+│  │   ├── ChatInputAreaView                      │
+│  │   └── ImageViewerSheet                       │
+│  └── SettingsViews/                             │
+│       ├── ChatInfoView                          │
+│       ├── EditProfileView                       │
+│       ├── SecurityView                          │
+│       ├── NotificationsView                     │
+│       └── AppearanceView                        │
 ├─────────────────────────────────────────────────┤
 │              Business Layer                       │
 │  AuthViewModel / ChatViewModel / ChatListVM     │
@@ -31,7 +43,7 @@ Lavender Messenger is a cross-platform secure messaging application. This is the
 ├─────────────────────────────────────────────────┤
 │              Generated Layer                      │
 │  messenger.pb.swift / messenger.grpc.swift       │
-│  (from messenger.proto via swift-protobuf)       │
+│  (from messenger.proto via SwiftProtobuf)        │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -40,7 +52,7 @@ Lavender Messenger is a cross-platform secure messaging application. This is the
 | Feature | Status |
 |---------|--------|
 | User login / registration | ✅ |
-| Bidirectional gRPC messaging | ✅ (stub) |
+| Bidirectional gRPC messaging | ✅ |
 | AES-256-GCM encryption | ✅ |
 | Secure credential storage (Keychain) | ✅ |
 | Typing indicators | ✅ |
@@ -48,16 +60,14 @@ Lavender Messenger is a cross-platform secure messaging application. This is the
 | Reply to messages | ✅ |
 | Read receipts | ✅ |
 | Image messages | ✅ |
-| Voice messages | ✅ (UI only) |
 | E2EE secret chats (ECDH + AES-256) | ✅ |
-| Group chats | ✅ (stub) |
-| Chat drafts | ✅ (stub) |
+| Group chats | 🔄 (stub) |
+| Chat drafts | 🔄 (stub) |
 | Push notifications (FCM) | ⏳ |
-| Themes | ✅ (UI only) |
-| Favorites | ⏳ |
-| Admin panel | ⏳ |
+| Themes | 🔄 (UI only) |
+| Secret chat key exchange | ✅ |
 
-**Legend:** ✅ = implemented, ⏳ = server-side stub only
+**Legend:** ✅ = implemented, 🔄 = partial/stub, ⏳ = planned
 
 ---
 
@@ -65,29 +75,38 @@ Lavender Messenger is a cross-platform secure messaging application. This is the
 
 ```
 LavenderMessenger-ios/
-├── Sources/LavenderMessenger/
-│   ├── LavenderMessengerApp.swift     # @main app entry
-│   ├── Models/
-│   │   └── Models.swift               # Message, ChatInfo, UserSession, etc.
-│   ├── DataLayer/
-│   │   ├── GRPCManager.swift          # gRPC connection + streaming
-│   │   ├── CryptoManager.swift        # AES-256-GCM (matches crypto.go)
-│   │   ├── CredentialStore.swift      # Keychain-backed secure storage
-│   │   └── ProtoUtils.swift           # Proto ↔ Model conversion
-│   ├── BusinessLayer/
-│   │   ├── AuthViewModel.swift        # Login / registration logic
-│   │   └── ChatViewModel.swift        # Chat state management
-│   ├── UI/
-│   │   ├── AuthView.swift             # Login + registration screen
-│   │   ├── ChatListView.swift         # Chat list + new chat sheets
-│   │   └── ChatRoomView.swift         # Message bubbles + input + actions
-│   ├── Generated/
-│   │   └── Placeholder.swift          # Temporary — run generate_grpc.sh
-│   └── Resources/
-├── Tests/
-├── generate_grpc.sh                   # Swift protobuf generation script
-├── Package.swift                      # SPM dependencies
-└── README.md
+├── LavenderMessengerApp.swift          # @main app entry point
+├── LavenderMessenger.xcodeproj/        # Xcode project (xcodegen)
+├── project.yml                         # xcodegen configuration
+├── Package.swift                       # SPM dependencies
+├── README.md
+├── CHANGELOG.md
+└── Sources/LavenderMessengerLib/
+    ├── Models/
+    │   └── Models.swift               # Message, ChatInfo, UserSession, etc.
+    ├── DataLayer/
+    │   ├── GRPCManager.swift          # gRPC connection + streaming
+    │   ├── CryptoManager.swift        # AES-256-GCM (matches crypto.go)
+    │   ├── CredentialStore.swift      # Keychain-backed secure storage
+    │   └── ProtoUtils.swift           # Proto ↔ Model conversion
+    ├── BusinessLayer/
+    │   ├── AuthViewModel.swift        # Login / registration logic
+    │   └── ChatViewModel.swift        # Chat state management
+    ├── UI/
+    │   ├── AuthView.swift             # Login + registration screen
+    │   ├── ChatListView.swift         # Chat list + new chat sheets
+    │   ├── ChatRoomView.swift         # Main chat screen (thin wrapper)
+    │   ├── Components/
+    │   │   ├── MessageBubbleView.swift    # Message bubbles + reactions
+    │   │   ├── ReactionPickerView.swift   # Emoji reaction picker
+    │   │   ├── TypingIndicatorView.swift  # Typing animation
+    │   │   ├── ReplyPreviewView.swift     # Reply preview + cancel
+    │   │   ├── ChatInputAreaView.swift    # Text input + send button
+    │   │   └── ImageViewerSheet.swift     # Full-screen image viewer
+    │   └── SettingsViews.swift        # ChatInfo, EditProfile, Security, etc.
+    └── Generated/
+        ├── messenger.pb.swift         # SwiftProtobuf generated (6754 lines)
+        └── messenger.grpc.swift       # gRPC Swift generated (10976 lines)
 ```
 
 ---
@@ -97,38 +116,28 @@ LavenderMessenger-ios/
 ### Prerequisites
 
 - **Xcode 15+** (iOS 17 SDK)
-- **macOS 14+** (for Swift 5.10)
-- **Homebrew** with:
-  ```bash
-  brew install swift-protobuf grpc-swift
-  ```
+- **Swift 6.0+**
+- **macOS 14+**
 
-### 1. Generate gRPC Code
+### 1. Open in Xcode
 
 ```bash
-cd LavenderMessenger-ios
-bash generate_grpc.sh
+open LavenderMessenger.xcodeproj
 ```
 
-This copies `messenger.proto` from the server repo and generates:
-- `Sources/Generated/Messenger.pb.swift` — protobuf messages
-- `Sources/Generated/Messenger.grpc.swift` — gRPC service stubs
+Xcode will automatically resolve SPM dependencies:
+- `grpc-swift` 2.x (GRPCCore)
+- `grpc-swift-nio-transport` (HTTP2ClientTransport)
+- `grpc-swift-protobuf` (ProtobufSerializer/Deserializer)
+- `swift-protobuf` 1.28+
 
-### 2. Open in Xcode
+### 2. Build & Run
 
-Open `Package.swift` with Xcode or use:
-
-```bash
-open Package.swift
-```
+`Cmd+R` in Xcode. Minimum deployment target: iOS 17.0.
 
 ### 3. Configure Server
 
 Default server: `13.140.25.249:50051` (editable in auth screen).
-
-### 4. Build & Run
-
-`Cmd+R` in Xcode. Minimum deployment target: iOS 17.0.
 
 ---
 
@@ -154,14 +163,30 @@ Client                              Server
    - `SERVER_INFO:1.0.7.1` → authenticated
    - `REGISTRATION_SUCCESS` → registered + authenticated
    - `AUTH_FAILED` → wrong password
-   - `USER_NOT_FOUND` → user doesn't exist (and not registering)
-   - `EMAIL_ALREADY_IN_USE` → email taken
+   - `USER_NOT_FOUND` → user doesn't exist
 
 ### Encryption
 
 - **Server-side**: Messages encrypted with AES-256-GCM using `CHAT_SECRET_KEY` env var (32 bytes)
 - **E2EE (secret chats)**: Client-side ECDH key exchange + AES-256-GCM with derived shared secret
 - Matches the Go server's `crypto.go` implementation exactly
+
+---
+
+## Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `grpc-swift` | 2.x+ | gRPC core (GRPCCore) |
+| `grpc-swift-nio-transport` | 1.x+ | HTTP/2 transport (NIO-based) |
+| `grpc-swift-protobuf` | 1.x+ | Protobuf serialization |
+| `swift-protobuf` | 1.28+ | Protobuf message types |
+
+Native frameworks only (no third-party deps):
+- `CryptoKit` — AES-256-GCM encryption
+- `Security` — Keychain access
+- `SwiftUI` — UI framework
+- `OSLog` — logging
 
 ---
 
