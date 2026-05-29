@@ -97,8 +97,7 @@ enum ProtoUtils {
             lastMessageHasImage: proto.lastMessageHasImage,
             allowMembersToAdd: proto.allowMembersToAdd,
             isSecret: proto.isSecret,
-            peerPublicKey: proto.peerPublicKey,
-            e2eeReady: proto.e2eeReady
+            peerPublicKey: proto.peerPublicKey
         )
     }
 }

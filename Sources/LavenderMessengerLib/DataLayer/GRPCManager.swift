@@ -215,6 +215,7 @@ final class GRPCManager: ObservableObject {
         authMsg.deviceName = dname
         authMsg.createdAt = Google_Protobuf_Timestamp(date: Date())
 
+        let authMessage = authMsg
         let (stream, continuation) = AsyncStream<Messenger_Message>.makeStream()
         chatMessageStream = stream
         chatMessageContinuation = continuation
@@ -224,7 +225,7 @@ final class GRPCManager: ObservableObject {
             do {
                 try await self.grpcClient!.bidirectionalStreaming(
                     request: StreamingClientRequest(of: Messenger_Message.self) { writer in
-                        try await writer.write(authMsg)
+                        try await writer.write(authMessage)
                         for await message in stream {
                             try await writer.write(message)
                         }
@@ -313,8 +314,10 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
                     options: .defaults
-                )
-                for protoMsg in try response.message.messages {
+                ) { response in
+                    return response.message
+                }
+                for protoMsg in response.message.messages {
                     await handleIncomingProtoMessage(protoMsg)
                 }
             } catch {
@@ -340,7 +343,7 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
                     options: .defaults
-                )
+                ) { _ in () }
             } catch {
                 logger.error("Failed to mark read: \(error.localizedDescription)")
             }
@@ -366,7 +369,7 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
                     options: .defaults
-                )
+                ) { _ in () }
             } catch {
                 logger.error("Failed to set reaction: \(error.localizedDescription)")
             }
