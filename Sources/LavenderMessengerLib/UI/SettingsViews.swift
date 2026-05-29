@@ -89,32 +89,6 @@ struct SettingsView: View {
         }
     }
 }
-    @ObservedObject var authViewModel: AuthViewModel
-    @Environment(\.dismiss) private var dismiss
-    @State private var bio: String = ""
-    @State private var status: String = ""
-
-    var body: some View {
-        Form {
-            Section("Profile") {
-                TextField("Username", text: $authViewModel.username)
-                    .disabled(true)
-
-                TextField("Bio", text: $bio, axis: .vertical)
-                    .lineLimit(3...6)
-
-                TextField("Status", text: $status)
-            }
-        }
-        .navigationTitle("Edit Profile")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Save") { dismiss() }
-            }
-        }
-    }
-}
 
 struct SecurityView: View {
     var body: some View {
