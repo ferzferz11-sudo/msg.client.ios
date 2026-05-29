@@ -1,11 +1,7 @@
 import SwiftUI
 
-// MARK: - LavenderMessengerApp
-
-@available(iOS 17.0, *)
 @main
 struct LavenderMessengerApp: App {
-
     @StateObject private var authViewModel = AuthViewModel()
 
     var body: some Scene {
