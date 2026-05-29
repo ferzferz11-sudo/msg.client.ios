@@ -315,9 +315,9 @@ final class GRPCManager: ObservableObject {
                     deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
                     options: .defaults
                 ) { response in
-                    return response.message
+                    return response.messages
                 }
-                for protoMsg in response.message.messages {
+                for protoMsg in response {
                     await handleIncomingProtoMessage(protoMsg)
                 }
             } catch {
