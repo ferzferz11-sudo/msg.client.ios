@@ -280,7 +280,9 @@ final class ChatViewModel: ObservableObject {
     // MARK: - Cleanup
 
     deinit {
-        typingTimer?.invalidate()
+        Task { @MainActor in
+            typingTimer?.invalidate()
+        }
     }
 }
 
