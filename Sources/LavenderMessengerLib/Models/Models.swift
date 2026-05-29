@@ -184,7 +184,6 @@ struct ChatInfo: Identifiable, Equatable {
     let allowMembersToAdd: Bool
     let isSecret: Bool
     let peerPublicKey: String
-    let e2eeReady: Bool
 
     func displayName(currentUsername: String) -> String {
         if type != "direct" { return name }
