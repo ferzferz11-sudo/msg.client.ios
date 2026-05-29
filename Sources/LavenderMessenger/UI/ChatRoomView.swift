@@ -40,7 +40,9 @@ struct ChatRoomView: View {
             inputArea
         }
         .navigationTitle(chatName)
+        
         .navigationBarTitleDisplayMode(.inline)
+
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showChatInfo = true }) {
@@ -485,7 +487,9 @@ struct ChatInfoView: View {
                 }
             }
             .navigationTitle("Chat Info")
-            .navigationBarTitleDisplayMode(.inline)
+            
+        .navigationBarTitleDisplayMode(.inline)
+
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
@@ -674,7 +678,9 @@ struct EditProfileView: View {
             }
         }
         .navigationTitle("Edit Profile")
+        
         .navigationBarTitleDisplayMode(.inline)
+
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save") {
@@ -707,7 +713,9 @@ struct SecurityView: View {
             }
         }
         .navigationTitle("Security")
+        
         .navigationBarTitleDisplayMode(.inline)
+
     }
 }
 
@@ -730,7 +738,9 @@ struct NotificationsView: View {
             }
         }
         .navigationTitle("Notifications")
+        
         .navigationBarTitleDisplayMode(.inline)
+
     }
 }
 
@@ -768,7 +778,9 @@ struct AppearanceView: View {
             }
         }
         .navigationTitle("Appearance")
+        
         .navigationBarTitleDisplayMode(.inline)
+
     }
 }
 

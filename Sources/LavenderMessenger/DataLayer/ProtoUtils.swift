@@ -3,18 +3,14 @@ import SwiftProtobuf
 
 // MARK: - Proto Utilities
 
-/// Converts between Swift protobuf messages and app models.
-/// Mirrors Android's ProtoUtils.kt functionality.
 enum ProtoUtils {
 
     // MARK: - Message -> Proto
 
-    func messageToProto(_ message: Message) -> Server_Message {
-        var timestamp = SwiftProtobuf.Google_Protobuf_Timestamp()
-        timestamp.seconds = Int64(message.timestamp.timeIntervalSince1970)
-        timestamp.nanos = Int32((message.timestamp.timeIntervalSince1970.truncatingRemainder(dividingBy: 1)) * 1_000_000_000)
+    static func messageToProto(_ message: Message) -> Messenger_Message {
+        var timestamp = Google_Protobuf_Timestamp(date: message.timestamp)
 
-        var builder = Server_Message()
+        var builder = Messenger_Message()
         builder.id = message.id
         builder.user = message.user
         builder.text = message.text
@@ -33,15 +29,13 @@ enum ProtoUtils {
         builder.voiceURL = message.voiceUrl
         builder.duration = Int32(message.duration)
         builder.userID = message.userId
-        builder.isE2EE = message.isE2EE
-        builder.e2eePayload = message.e2eePayload
+        builder.isE2Ee = message.isE2EE
 
-        // Add reactions
         for reaction in message.reactions {
-            var reactionProto = Server_Reaction()
-            reactionProto.user = reaction.user
-            reactionProto.emoji = reaction.emoji
-            builder.reactions.append(reactionProto)
+            var r = Messenger_Reaction()
+            r.user = reaction.user
+            r.emoji = reaction.emoji
+            builder.reactions.append(r)
         }
 
         return builder
@@ -49,12 +43,10 @@ enum ProtoUtils {
 
     // MARK: - Proto -> Message
 
-    func protoToMessage(_ proto: Server_Message) -> Message {
+    static func protoToMessage(_ proto: Messenger_Message) -> Message {
         let timestamp: Date
         if proto.hasCreatedAt {
-            let seconds = Double(proto.createdAt.seconds)
-            let nanos = Double(proto.createdAt.nanos) / 1_000_000_000
-            timestamp = Date(timeIntervalSince1970: seconds + nanos)
+            timestamp = proto.createdAt.date
         } else {
             timestamp = Date()
         }
@@ -78,27 +70,16 @@ enum ProtoUtils {
             voiceUrl: proto.voiceURL,
             duration: Int(proto.duration),
             userId: proto.userID,
-            isE2EE: proto.isE2EE,
-            e2eePayload: proto.e2eePayload
+            isE2EE: proto.isE2Ee,
+            e2eePayload: proto.e2EePayload
         )
     }
 
     // MARK: - ChatInfo
 
-    func protoToChatInfo(_ proto: Server_ChatInfo) -> ChatInfo {
-        let createdAt: Date
-        if proto.hasCreatedAt {
-            createdAt = proto.createdAt.date
-        } else {
-            createdAt = Date()
-        }
-
-        let lastMessageTime: Date
-        if proto.hasLastMessageTime {
-            lastMessageTime = proto.lastMessageTime.date
-        } else {
-            lastMessageTime = Date()
-        }
+    static func protoToChatInfo(_ proto: Messenger_ChatInfo) -> ChatInfo {
+        let createdAt = proto.hasCreatedAt ? proto.createdAt.date : Date()
+        let lastMessageTime = proto.hasLastMessageTime ? proto.lastMessageTime.date : Date()
 
         return ChatInfo(
             id: proto.id,
@@ -120,32 +101,11 @@ enum ProtoUtils {
             e2eeReady: proto.e2eeReady
         )
     }
-
-    // MARK: - Timestamp Helpers
-
-    func getCurrentTimestamp() -> SwiftProtobuf.Google_Protobuf_Timestamp {
-        return SwiftProtobuf.Google_Protobuf_Timestamp(date: Date())
-    }
-
-    func timestampToProto(_ date: Date) -> SwiftProtobuf.Google_Protobuf_Timestamp {
-        return SwiftProtobuf.Google_Protobuf_Timestamp(date: date)
-    }
-
-    // MARK: - TypingRequest
-
-    func createTypingRequest(roomId: String, username: String, isTyping: Bool, userId: String) -> Server_TypingRequest {
-        var req = Server_TypingRequest()
-        req.roomID = roomId
-        req.username = username
-        req.isTyping = isTyping
-        req.userID = userId
-        return req
-    }
 }
 
 // MARK: - Google_Protobuf_Timestamp Extensions
 
-extension SwiftProtobuf.Google_Protobuf_Timestamp {
+extension Google_Protobuf_Timestamp {
     var date: Date {
         let seconds = Double(self.seconds)
         let nanos = Double(self.nanos) / 1_000_000_000

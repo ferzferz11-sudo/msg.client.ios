@@ -2,6 +2,10 @@ import Foundation
 import SwiftUI
 import Combine
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 // MARK: - AuthViewModel
 
 /// Manages authentication state and login/registration flow.
@@ -75,7 +79,7 @@ final class AuthViewModel: ObservableObject {
             register: false,
             email: "",
             deviceId: grpcManager.getUserId(),
-            deviceName: UIDevice.current.model
+            deviceName: "iOS Device"
         ) { [weak self] message in
             // Message received callback
         }
@@ -108,7 +112,7 @@ final class AuthViewModel: ObservableObject {
             register: true,
             email: email,
             deviceId: grpcManager.getUserId(),
-            deviceName: UIDevice.current.model
+            deviceName: "iOS Device"
         ) { [weak self] message in
             // Message received callback
         }
