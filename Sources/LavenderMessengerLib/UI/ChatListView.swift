@@ -185,11 +185,11 @@ struct ChatRowView: View {
 
     private func formatTime(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isToday(date) {
+        if calendar.isDate(date, inSameDayAs: Date()) {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
             return formatter.string(from: date)
-        } else if calendar.isYesterday(date) {
+        } else if calendar.isDate(date, inSameDayAs: calendar.date(byAdding: .day, value: -1, to: Date())!) {
             return "Yesterday"
         } else {
             let formatter = DateFormatter()

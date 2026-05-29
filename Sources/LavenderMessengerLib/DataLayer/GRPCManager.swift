@@ -35,14 +35,6 @@ enum DeviceInfo {
     }
 }
 
-// MARK: - Client Version
-
-enum ClientVersion {
-    static var string: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.0"
-    }
-}
-
 // MARK: - GRPC Connection Manager
 
 @available(iOS 18.0, *)
