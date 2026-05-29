@@ -45,6 +45,7 @@ enum ClientVersion {
 
 // MARK: - GRPC Connection Manager
 
+@available(iOS 18.0, *)
 @MainActor
 final class GRPCManager: ObservableObject {
 
@@ -256,9 +257,14 @@ final class GRPCManager: ObservableObject {
 
     func sendTextMessage(text: String, roomId: String, repliedToMessageId: String = "", repliedToUser: String = "", repliedToText: String = "") {
         sendMessage(Message(
-            user: currentUsername, text: text, roomId: roomId,
-            repliedToMessageId: repliedToMessageId, repliedToUser: repliedToUser,
-            repliedToText: repliedToText, avatarUrl: avatarCache[currentUsername] ?? "",
+            user: currentUsername,
+            text: text,
+            reactions: [],
+            repliedToMessageId: repliedToMessageId,
+            repliedToUser: repliedToUser,
+            repliedToText: repliedToText,
+            roomId: roomId,
+            avatarUrl: avatarCache[currentUsername] ?? "",
             userId: currentUserId
         ))
     }
@@ -307,10 +313,8 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
                     options: .defaults
-                ) { response in
-                    return response.message
-                }
-                for protoMsg in response.messages {
+                )
+                for protoMsg in try response.message.messages {
                     await handleIncomingProtoMessage(protoMsg)
                 }
             } catch {
@@ -336,9 +340,7 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
                     options: .defaults
-                ) { response in
-                    return response.message
-                }
+                )
             } catch {
                 logger.error("Failed to mark read: \(error.localizedDescription)")
             }
@@ -364,7 +366,7 @@ final class GRPCManager: ObservableObject {
                     serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
                     deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
                     options: .defaults
-                ) { _ in () }
+                )
             } catch {
                 logger.error("Failed to set reaction: \(error.localizedDescription)")
             }
@@ -431,71 +433,42 @@ final class GRPCManager: ObservableObject {
     func addParticipant(chatId: String, username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeParticipant(chatId: String, username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func editMessage(messageId: String, text: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
-    func deleteMessage(_ message: Message) {
-        messages.removeAll { $0.id == message.id }
-        deletedMessageIds.insert(message.id)
-    }
-    func updateMessage(_ message: Message) {
-        if let i = messages.firstIndex(where: { $0.id == message.id }) {
-            messages[i] = message
-        }
-    }
+    func deleteMessage(_ message: Message) { messages.removeAll { $0.id == message.id }; deletedMessageIds.insert(message.id) }
+    func updateMessage(_ message: Message) { if let i = messages.firstIndex(where: { $0.id == message.id }) { messages[i] = message } }
     func clearMessages() { messages = [] }
-
-    // MARK: - Drafts (stubs)
 
     func saveDraft(roomId: String, draftText: String, repliedToMessageId: String = "", repliedToUser: String = "", repliedToText: String = "", completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func getDraft(roomId: String, completion: @escaping (String, String, String, String, Bool) -> Void = { _, _, _, _, _ in }) {}
     func deleteDraft(roomId: String, completion: @escaping (Bool) -> Void = { _ in }) {}
 
-    // MARK: - Muted Chats (stubs)
-
     func getMutedChats(completion: @escaping ([String]) -> Void = { _ in }) {}
     func setMutedChat(roomId: String, muted: Bool, completion: @escaping (Bool) -> Void = { _ in }) {}
-
-    // MARK: - Favorites (stubs)
 
     func addFavorite(userId: String, messageId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeFavorite(userId: String, messageId: String, completion: @escaping (Bool) -> Void = { _ in }) {}
     func getFavorites(userId: String, completion: @escaping ([Message]) -> Void = { _ in }) {}
 
-    // MARK: - Devices (stubs)
-
     func getDevices(userId: String, completion: @escaping ([DeviceInfo]) -> Void = { _ in }) {}
     func deleteDevice(userId: String, deviceId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func deleteOtherDevices(userId: String, currentDeviceId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
 
-    // MARK: - Password Reset (stubs)
-
     func requestPasswordReset(email: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func resetPassword(token: String, newPassword: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
 
-    // MARK: - Profile (stubs)
-
     func getUserProfile(username: String, completion: @escaping (String, String, String, String) -> Void = { _, _, _, _ in }) {}
     func getUserAvatar(username: String, completion: @escaping (String) -> Void = { _ in }) {}
-
-    // MARK: - Contacts (stubs)
 
     func addContact(username: String, contactUsername: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeContact(username: String, contactUsername: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func getContacts(username: String, completion: @escaping ([String]) -> Void = { _ in }) {}
 
-    // MARK: - Chat List Version (stub)
-
     func getChatListVersion(username: String, completion: @escaping (Int64) -> Void = { _ in }) {}
 
-    // MARK: - FCM Token
-
     func registerToken(username: String, token: String, pushEnabled: Bool = true) {}
-
-    // MARK: - Chat Settings (stubs)
 
     func updateChatName(chatId: String, newName: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func updateChatAvatar(chatId: String, avatarUrl: String, username: String, fullAvatarUrl: String = "", completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func updateChatSettings(chatId: String, allowMembersToAdd: Bool, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
-
-    // MARK: - Secret Chats (stubs)
 
     func createSecretChat(targetUsername: String, publicKey: String, completion: @escaping (String, Bool, String, String) -> Void = { _, _, _, _ in }) {}
     func exchangeSecretKey(chatId: String, publicKey: String, completion: @escaping (Bool, String, Bool) -> Void = { _, _, _ in }) {}
@@ -512,21 +485,19 @@ final class GRPCManager: ObservableObject {
         sendProtoMessage(msg)
     }
 
-    // MARK: - FCM Logs
+    struct FCMLogEntry: Equatable {
+        let timestamp: String
+        let level: String
+        let message: String
+    }
 
     func getFCMLogs(completion: @escaping ([FCMLogEntry]) -> Void = { _ in }) {}
-
-    // MARK: - User ID
 
     func setUserId(_ userId: String) { currentUserId = userId }
     func getUserId() -> String { currentUserId }
     func fetchUserId(username: String, completion: @escaping (String?, Bool) -> Void = { _, _ in }) {}
 
-    // MARK: - Delete Profile
-
     func deleteProfile(username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
-
-    // MARK: - Avatar Cache
 
     func updateAvatarCache(username: String, avatarUrl: String, fullAvatarUrl: String = "") {
         avatarCache[username] = avatarUrl

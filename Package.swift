@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "LavenderMessenger",
-    platforms: [.iOS(.v17)],
+    platforms: [.iOS(.v18)],
     products: [
         .library(name: "LavenderMessenger", targets: ["LavenderMessengerLib"]),
     ],
@@ -19,7 +19,7 @@ let package = Package(
             name: "LavenderMessengerLib",
             dependencies: [
                 .product(name: "GRPCCore", package: "grpc-swift"),
-                .product(name: "GRPCNIOTransportHTTP2", package: "grpc-swift-nio-transport"),
+                .product(name: "GRPCNIOTransportHTTP2Posix", package: "grpc-swift-nio-transport"),
                 .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
             ]
