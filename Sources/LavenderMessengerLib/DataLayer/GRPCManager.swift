@@ -299,6 +299,9 @@ final class GRPCManager: ObservableObject {
     func markRead(roomId: String, username: String, completion: (() -> Void)? = nil) { completion?() }
     func setReaction(messageId: String, username: String, emoji: String) {}
     func sendTypingSignal(username: String, isTyping: Bool) {}
+    func saveDraft(roomId: String, draftText: String, repliedToMessageId: String, repliedToUser: String, repliedToText: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
+    func getDraft(roomId: String, completion: @escaping (String, String, String, String, Bool) -> Void) { completion("", "", "", "", false) }
+    func deleteDraft(roomId: String, completion: @escaping (Bool) -> Void = { _ in }) {}
     func getChats(username: String, completion: @escaping ([ChatInfo]) -> Void) { completion([]) }
     func createDirectChat(user1: String, user2: String, completion: @escaping (String?) -> Void) { completion(nil) }
     func createGroupChat(name: String, participants: [String], creator: String, completion: @escaping (String?) -> Void) { completion(nil) }

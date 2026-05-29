@@ -280,11 +280,12 @@ final class ChatViewModel: ObservableObject {
     // MARK: - Cleanup
 
     deinit {
-        Task { @MainActor in
-            typingTimer?.invalidate()
-        }
+        typingTimer?.invalidate()
     }
 }
+
+// Suppress Sendable warning for Timer
+extension Timer: @unchecked Sendable {}
 
 // MARK: - ChatListViewModel
 

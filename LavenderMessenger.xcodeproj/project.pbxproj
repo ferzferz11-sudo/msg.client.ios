@@ -15,6 +15,7 @@
 		3A86FF508AC1EAFA71DCA4C4 /* ChatInputAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D5FA7BB9D7E649D423450 /* ChatInputAreaView.swift */; };
 		476D7B9AE55EF7C854AADC39 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */; };
 		4D761746D1FE9B883923EEA1 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E50FE60B1DCB9BCF9193DE2 /* CredentialStore.swift */; };
+		50C1FCC144A51CD48E0B5E57 /* ChatInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89EF7EE11838FEC4B17F4CD /* ChatInfoView.swift */; };
 		5A824C616FD9EBAE14572D93 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FFD2E19A89034CE7229A0E /* Models.swift */; };
 		638C6740A13D628D148B6630 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 884A433C7A1D10DB97B4E970 /* SwiftProtobuf */; };
 		67E4D08F91233175C1FB2CDE /* ReplyPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2A61646573929E0AC516B /* ReplyPreviewView.swift */; };
@@ -52,6 +53,7 @@
 		C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
 		E40D5FA7BB9D7E649D423450 /* ChatInputAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputAreaView.swift; sourceTree = "<group>"; };
 		F547C88EE6E2E5A614A99596 /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
+		F89EF7EE11838FEC4B17F4CD /* ChatInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInfoView.swift; sourceTree = "<group>"; };
 		FB8AC52B09D5D87E910C534B /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		FC7CC0CEFAE915D2D534C526 /* ProtoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoUtils.swift; sourceTree = "<group>"; };
 		FED62050C6F89DD5C59CCC6E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				FED62050C6F89DD5C59CCC6E /* AuthView.swift */,
+				F89EF7EE11838FEC4B17F4CD /* ChatInfoView.swift */,
 				FB8AC52B09D5D87E910C534B /* ChatListView.swift */,
 				C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */,
 				F547C88EE6E2E5A614A99596 /* SettingsViews.swift */,
@@ -199,7 +202,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					230B6E4316027F1E3D8B4B45 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -236,6 +238,7 @@
 			files = (
 				A07DCE62F6320997AE66E0A0 /* AuthView.swift in Sources */,
 				BDA27F2978C885C4984324D4 /* AuthViewModel.swift in Sources */,
+				50C1FCC144A51CD48E0B5E57 /* ChatInfoView.swift in Sources */,
 				3A86FF508AC1EAFA71DCA4C4 /* ChatInputAreaView.swift in Sources */,
 				71700926DEA52A7392A2DB56 /* ChatListView.swift in Sources */,
 				476D7B9AE55EF7C854AADC39 /* ChatRoomView.swift in Sources */,
@@ -266,7 +269,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -405,7 +407,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
