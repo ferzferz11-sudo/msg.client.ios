@@ -8,7 +8,7 @@ enum ProtoUtils {
     // MARK: - Message -> Proto
 
     static func messageToProto(_ message: Message) -> Messenger_Message {
-        var timestamp = Google_Protobuf_Timestamp(date: message.timestamp)
+        let timestamp = Google_Protobuf_Timestamp(date: message.timestamp)
 
         var builder = Messenger_Message()
         builder.id = message.id
