@@ -188,7 +188,7 @@ struct MessageBubbleView: View {
 
     private func formatTimestamp(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isToday(date) {
+        if calendar.isDate(date, inSameDayAs: Date()) {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
             return formatter.string(from: date)
