@@ -7,6 +7,10 @@ import NIOCore
 import NIOPosix
 import OSLog
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 // MARK: - Logger
 
 private let logger = Logger(subsystem: "com.lavender.messenger", category: "GRPCManager")
@@ -67,7 +71,7 @@ final class GRPCManager: ObservableObject {
     private var currentDeviceName: String = ""
     private var isStreamAuthenticated: Bool = false
 
-    private var grpcClient: GRPCClient<HTTP2ClientTransport>?
+    private var grpcClient: GRPCClient<HTTP2ClientTransport.Posix>?
     private var eventLoopGroup: EventLoopGroup?
     private var chatTask: Task<Void, Never>?
     private var typingTask: Task<Void, Never>?
@@ -106,18 +110,18 @@ final class GRPCManager: ObservableObject {
         do {
             eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
-            let transport: HTTP2ClientTransport
+            let transportSecurity: HTTP2ClientTransport.Posix.TransportSecurity
             if useTLS {
-                transport = try HTTP2ClientTransport.tls(
-                    targeting: .host(serverAddress, port: port),
-                    eventLoopGroup: eventLoopGroup!
-                )
+                transportSecurity = .tls(.defaults)
             } else {
-                transport = try HTTP2ClientTransport.plaintext(
-                    targeting: .host(serverAddress, port: port),
-                    eventLoopGroup: eventLoopGroup!
-                )
+                transportSecurity = .plaintext
             }
+
+            let transport = try HTTP2ClientTransport.Posix(
+                target: .ipv4(host: serverAddress, port: port),
+                transportSecurity: transportSecurity,
+                eventLoopGroup: eventLoopGroup!
+            )
 
             grpcClient = GRPCClient(transport: transport)
             connectionStatus = .ready
@@ -217,22 +221,20 @@ final class GRPCManager: ObservableObject {
         chatTask = Task { [weak self] in
             guard let self = self else { return }
             do {
-                try await withGRPCClient(transport: client.transport) { grpcClient in
-                    try await grpcClient.bidirectionalStreaming(
-                        request: StreamingClientRequest(of: Messenger_Message.self) { writer in
-                            try await writer.write(authMsg)
-                            for await message in stream {
-                                try await writer.write(message)
-                            }
-                        },
-                        descriptor: Messenger_ChatService.Method.Chat.descriptor,
-                        serializer: ProtobufSerializer<Messenger_Message>(),
-                        deserializer: ProtobufDeserializer<Messenger_Message>(),
-                        options: .defaults
-                    ) { response in
-                        for try await message in response.messages {
-                            await self.handleIncomingProtoMessage(message)
+                try await self.grpcClient!.bidirectionalStreaming(
+                    request: StreamingClientRequest(of: Messenger_Message.self) { writer in
+                        try await writer.write(authMsg)
+                        for await message in stream {
+                            try await writer.write(message)
                         }
+                    },
+                    descriptor: Messenger_ChatService.Method.Chat.descriptor,
+                    serializer: ProtobufSerializer<Messenger_Message>(),
+                    deserializer: ProtobufDeserializer<Messenger_Message>(),
+                    options: .defaults
+                ) { response in
+                    for try await message in response.messages {
+                        await self.handleIncomingProtoMessage(message)
                     }
                 }
             } catch is CancellationError {
@@ -299,16 +301,16 @@ final class GRPCManager: ObservableObject {
         request.room = roomId
         Task {
             do {
-                let response = try await withGRPCClient(transport: client.transport) { grpcClient in
-                    try await grpcClient.unary(
-                        request: ClientRequest.single(request),
-                        descriptor: Messenger_ChatService.Method.GetHistory.descriptor,
-                        serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
-                        deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
-                        options: .defaults
-                    )
+                let response = try await client.unary(
+                    request: ClientRequest(message: request),
+                    descriptor: Messenger_ChatService.Method.GetHistory.descriptor,
+                    serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
+                    deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
+                    options: .defaults
+                ) { response in
+                    return response.message
                 }
-                for protoMsg in try response.message.messages {
+                for protoMsg in response.messages {
                     await handleIncomingProtoMessage(protoMsg)
                 }
             } catch {
@@ -328,14 +330,14 @@ final class GRPCManager: ObservableObject {
         request.userID = currentUserId
         Task {
             do {
-                _ = try await withGRPCClient(transport: client.transport) { grpcClient in
-                    try await grpcClient.unary(
-                        request: ClientRequest.single(request),
-                        descriptor: Messenger_ChatService.Method.MarkRead.descriptor,
-                        serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
-                        deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
-                        options: .defaults
-                    )
+                _ = try await client.unary(
+                    request: ClientRequest(message: request),
+                    descriptor: Messenger_ChatService.Method.MarkRead.descriptor,
+                    serializer: ProtobufSerializer<Messenger_MarkReadRequest>(),
+                    deserializer: ProtobufDeserializer<Messenger_MarkReadResponse>(),
+                    options: .defaults
+                ) { response in
+                    return response.message
                 }
             } catch {
                 logger.error("Failed to mark read: \(error.localizedDescription)")
@@ -356,15 +358,13 @@ final class GRPCManager: ObservableObject {
         request.reaction = reaction
         Task {
             do {
-                _ = try await withGRPCClient(transport: client.transport) { grpcClient in
-                    try await grpcClient.unary(
-                        request: ClientRequest.single(request),
-                        descriptor: Messenger_ChatService.Method.SetReaction.descriptor,
-                        serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
-                        deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
-                        options: .defaults
-                    )
-                }
+                _ = try await client.unary(
+                    request: ClientRequest(message: request),
+                    descriptor: Messenger_ChatService.Method.SetReaction.descriptor,
+                    serializer: ProtobufSerializer<Messenger_ReactionRequest>(),
+                    deserializer: ProtobufDeserializer<Messenger_ReactionResponse>(),
+                    options: .defaults
+                ) { _ in () }
             } catch {
                 logger.error("Failed to set reaction: \(error.localizedDescription)")
             }
@@ -383,21 +383,19 @@ final class GRPCManager: ObservableObject {
             self.typingContinuation = continuation
 
             do {
-                try await withGRPCClient(transport: client.transport) { grpcClient in
-                    try await grpcClient.bidirectionalStreaming(
-                        request: StreamingClientRequest(of: Messenger_TypingRequest.self) { writer in
-                            for await typingReq in stream {
-                                try await writer.write(typingReq)
-                            }
-                        },
-                        descriptor: Messenger_ChatService.Method.Typing.descriptor,
-                        serializer: ProtobufSerializer<Messenger_TypingRequest>(),
-                        deserializer: ProtobufDeserializer<Messenger_TypingSignal>(),
-                        options: .defaults
-                    ) { response in
-                        for try await signal in response.messages {
-                            await self.handleTypingSignal(signal)
+                try await self.grpcClient!.bidirectionalStreaming(
+                    request: StreamingClientRequest(of: Messenger_TypingRequest.self) { writer in
+                        for await typingReq in stream {
+                            try await writer.write(typingReq)
                         }
+                    },
+                    descriptor: Messenger_ChatService.Method.Typing.descriptor,
+                    serializer: ProtobufSerializer<Messenger_TypingRequest>(),
+                    deserializer: ProtobufDeserializer<Messenger_TypingSignal>(),
+                    options: .defaults
+                ) { response in
+                    for try await signal in response.messages {
+                        await self.handleTypingSignal(signal)
                     }
                 }
             } catch is CancellationError {
@@ -433,47 +431,103 @@ final class GRPCManager: ObservableObject {
     func addParticipant(chatId: String, username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeParticipant(chatId: String, username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func editMessage(messageId: String, text: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
-    func deleteMessage(_ message: Message) { messages.removeAll { $0.id == message.id }; deletedMessageIds.insert(message.id) }
-    func updateMessage(_ message: Message) { if let i = messages.firstIndex(where: { $0.id == message.id }) { messages[i] = message } }
+    func deleteMessage(_ message: Message) {
+        messages.removeAll { $0.id == message.id }
+        deletedMessageIds.insert(message.id)
+    }
+    func updateMessage(_ message: Message) {
+        if let i = messages.firstIndex(where: { $0.id == message.id }) {
+            messages[i] = message
+        }
+    }
     func clearMessages() { messages = [] }
+
+    // MARK: - Drafts (stubs)
+
     func saveDraft(roomId: String, draftText: String, repliedToMessageId: String = "", repliedToUser: String = "", repliedToText: String = "", completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func getDraft(roomId: String, completion: @escaping (String, String, String, String, Bool) -> Void = { _, _, _, _, _ in }) {}
     func deleteDraft(roomId: String, completion: @escaping (Bool) -> Void = { _ in }) {}
+
+    // MARK: - Muted Chats (stubs)
+
     func getMutedChats(completion: @escaping ([String]) -> Void = { _ in }) {}
     func setMutedChat(roomId: String, muted: Bool, completion: @escaping (Bool) -> Void = { _ in }) {}
+
+    // MARK: - Favorites (stubs)
+
     func addFavorite(userId: String, messageId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeFavorite(userId: String, messageId: String, completion: @escaping (Bool) -> Void = { _ in }) {}
     func getFavorites(userId: String, completion: @escaping ([Message]) -> Void = { _ in }) {}
+
+    // MARK: - Devices (stubs)
+
     func getDevices(userId: String, completion: @escaping ([DeviceInfo]) -> Void = { _ in }) {}
     func deleteDevice(userId: String, deviceId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func deleteOtherDevices(userId: String, currentDeviceId: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
+
+    // MARK: - Password Reset (stubs)
+
     func requestPasswordReset(email: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func resetPassword(token: String, newPassword: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
+
+    // MARK: - Profile (stubs)
+
     func getUserProfile(username: String, completion: @escaping (String, String, String, String) -> Void = { _, _, _, _ in }) {}
     func getUserAvatar(username: String, completion: @escaping (String) -> Void = { _ in }) {}
+
+    // MARK: - Contacts (stubs)
+
     func addContact(username: String, contactUsername: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func removeContact(username: String, contactUsername: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func getContacts(username: String, completion: @escaping ([String]) -> Void = { _ in }) {}
+
+    // MARK: - Chat List Version (stub)
+
     func getChatListVersion(username: String, completion: @escaping (Int64) -> Void = { _ in }) {}
+
+    // MARK: - FCM Token
+
     func registerToken(username: String, token: String, pushEnabled: Bool = true) {}
+
+    // MARK: - Chat Settings (stubs)
+
     func updateChatName(chatId: String, newName: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func updateChatAvatar(chatId: String, avatarUrl: String, username: String, fullAvatarUrl: String = "", completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
     func updateChatSettings(chatId: String, allowMembersToAdd: Bool, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
+
+    // MARK: - Secret Chats (stubs)
+
     func createSecretChat(targetUsername: String, publicKey: String, completion: @escaping (String, Bool, String, String) -> Void = { _, _, _, _ in }) {}
     func exchangeSecretKey(chatId: String, publicKey: String, completion: @escaping (Bool, String, Bool) -> Void = { _, _, _ in }) {}
     func getSecretChatKey(chatId: String, completion: @escaping (String, Bool) -> Void = { _, _ in }) {}
+
     func sendE2EEMessage(chatId: String, encryptedPayload: String) {
         guard isStreamAuthenticated else { return }
         var msg = Messenger_Message()
-        msg.user = currentUsername; msg.roomID = chatId; msg.isE2Ee = true
-        msg.e2EePayload = encryptedPayload; msg.createdAt = Google_Protobuf_Timestamp(date: Date())
+        msg.user = currentUsername
+        msg.roomID = chatId
+        msg.isE2Ee = true
+        msg.e2EePayload = encryptedPayload
+        msg.createdAt = Google_Protobuf_Timestamp(date: Date())
         sendProtoMessage(msg)
     }
+
+    // MARK: - FCM Logs
+
     func getFCMLogs(completion: @escaping ([FCMLogEntry]) -> Void = { _ in }) {}
+
+    // MARK: - User ID
+
     func setUserId(_ userId: String) { currentUserId = userId }
     func getUserId() -> String { currentUserId }
     func fetchUserId(username: String, completion: @escaping (String?, Bool) -> Void = { _, _ in }) {}
+
+    // MARK: - Delete Profile
+
     func deleteProfile(username: String, completion: @escaping (Bool, String) -> Void = { _, _ in }) {}
+
+    // MARK: - Avatar Cache
+
     func updateAvatarCache(username: String, avatarUrl: String, fullAvatarUrl: String = "") {
         avatarCache[username] = avatarUrl
         if !fullAvatarUrl.isEmpty { fullAvatarCache[username] = fullAvatarUrl }
@@ -510,7 +564,11 @@ final class GRPCManager: ObservableObject {
             return
         }
 
-        if proto.text == "FORCE_LOGOUT" { authStatus = "FORCE_LOGOUT"; disconnect(); return }
+        if proto.text == "FORCE_LOGOUT" {
+            authStatus = "FORCE_LOGOUT"
+            disconnect()
+            return
+        }
         if proto.text.hasPrefix("FORCE_DISCONNECT:") {
             if String(proto.text.dropFirst("FORCE_DISCONNECT:".count)) == currentUsername { disconnect() }
             return

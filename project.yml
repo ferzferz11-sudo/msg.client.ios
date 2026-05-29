@@ -31,13 +31,15 @@ targets:
         product: GRPCCore
       - package: grpc-swift-nio-transport
         product: GRPCNIOTransportHTTP2
+      - package: grpc-swift-nio-transport
+        product: GRPCNIOTransportHTTP2Posix
       - package: grpc-swift-protobuf
         product: GRPCProtobuf
       - package: swift-protobuf
         product: SwiftProtobuf
     settings:
       base:
-        SWIFT_VERSION: "5.10"
+        SWIFT_VERSION: "6.0"
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         GENERATE_INFOPLIST_FILE: "YES"
         PRODUCT_BUNDLE_IDENTIFIER: "com.lavender.LavenderMessenger"

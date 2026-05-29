@@ -30,7 +30,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "Chat",
-                type: .bidirectionalStreaming
             )
         }
         /// Namespace for "Typing" metadata.
@@ -43,7 +42,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "Typing",
-                type: .bidirectionalStreaming
             )
         }
         /// Namespace for "CallSession" metadata.
@@ -56,7 +54,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "CallSession",
-                type: .bidirectionalStreaming
             )
         }
         /// Namespace for "GetClients" metadata.
@@ -69,7 +66,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetClients",
-                type: .unary
             )
         }
         /// Namespace for "GetAllUsers" metadata.
@@ -82,7 +78,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetAllUsers",
-                type: .unary
             )
         }
         /// Namespace for "GetAllChats" metadata.
@@ -95,7 +90,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetAllChats",
-                type: .unary
             )
         }
         /// Namespace for "GetHistory" metadata.
@@ -108,7 +102,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetHistory",
-                type: .unary
             )
         }
         /// Namespace for "SetReaction" metadata.
@@ -121,7 +114,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SetReaction",
-                type: .unary
             )
         }
         /// Namespace for "DeleteMessages" metadata.
@@ -134,7 +126,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteMessages",
-                type: .unary
             )
         }
         /// Namespace for "RegisterToken" metadata.
@@ -147,7 +138,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "RegisterToken",
-                type: .unary
             )
         }
         /// Namespace for "GetChats" metadata.
@@ -160,7 +150,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetChats",
-                type: .unary
             )
         }
         /// Namespace for "GetChatListVersion" metadata.
@@ -173,7 +162,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetChatListVersion",
-                type: .unary
             )
         }
         /// Namespace for "CreateDirectChat" metadata.
@@ -186,7 +174,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "CreateDirectChat",
-                type: .unary
             )
         }
         /// Namespace for "CreateGroupChat" metadata.
@@ -199,7 +186,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "CreateGroupChat",
-                type: .unary
             )
         }
         /// Namespace for "UpdateUsername" metadata.
@@ -212,7 +198,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateUsername",
-                type: .unary
             )
         }
         /// Namespace for "UpdatePassword" metadata.
@@ -225,7 +210,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdatePassword",
-                type: .unary
             )
         }
         /// Namespace for "AdminUpdatePassword" metadata.
@@ -238,7 +222,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "AdminUpdatePassword",
-                type: .unary
             )
         }
         /// Namespace for "MarkRead" metadata.
@@ -251,7 +234,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "MarkRead",
-                type: .unary
             )
         }
         /// Namespace for "UpdateAvatar" metadata.
@@ -264,7 +246,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateAvatar",
-                type: .unary
             )
         }
         /// Namespace for "UpdateProfile" metadata.
@@ -277,7 +258,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateProfile",
-                type: .unary
             )
         }
         /// Namespace for "GetUserProfile" metadata.
@@ -290,7 +270,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetUserProfile",
-                type: .unary
             )
         }
         /// Namespace for "GetUserAvatar" metadata.
@@ -303,7 +282,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetUserAvatar",
-                type: .unary
             )
         }
         /// Namespace for "AddParticipant" metadata.
@@ -316,7 +294,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "AddParticipant",
-                type: .unary
             )
         }
         /// Namespace for "RemoveParticipant" metadata.
@@ -329,7 +306,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "RemoveParticipant",
-                type: .unary
             )
         }
         /// Namespace for "EditMessage" metadata.
@@ -342,7 +318,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "EditMessage",
-                type: .unary
             )
         }
         /// Namespace for "UpdateChatName" metadata.
@@ -355,7 +330,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateChatName",
-                type: .unary
             )
         }
         /// Namespace for "UpdateChatAvatar" metadata.
@@ -368,7 +342,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateChatAvatar",
-                type: .unary
             )
         }
         /// Namespace for "UpdateChatSettings" metadata.
@@ -381,7 +354,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "UpdateChatSettings",
-                type: .unary
             )
         }
         /// Namespace for "DeleteChat" metadata.
@@ -394,7 +366,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteChat",
-                type: .unary
             )
         }
         /// Namespace for "DeleteProfile" metadata.
@@ -407,7 +378,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteProfile",
-                type: .unary
             )
         }
         /// Namespace for "AddContact" metadata.
@@ -420,7 +390,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "AddContact",
-                type: .unary
             )
         }
         /// Namespace for "RemoveContact" metadata.
@@ -433,7 +402,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "RemoveContact",
-                type: .unary
             )
         }
         /// Namespace for "GetContacts" metadata.
@@ -446,7 +414,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetContacts",
-                type: .unary
             )
         }
         /// Namespace for "GetThemes" metadata.
@@ -459,7 +426,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetThemes",
-                type: .unary
             )
         }
         /// Namespace for "SaveTheme" metadata.
@@ -472,7 +438,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SaveTheme",
-                type: .unary
             )
         }
         /// Namespace for "SetCurrentTheme" metadata.
@@ -485,7 +450,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SetCurrentTheme",
-                type: .unary
             )
         }
         /// Namespace for "DeleteTheme" metadata.
@@ -498,7 +462,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteTheme",
-                type: .unary
             )
         }
         /// Namespace for "GetFCMLogs" metadata.
@@ -511,7 +474,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetFCMLogs",
-                type: .unary
             )
         }
         /// Namespace for "SaveDraft" metadata.
@@ -524,7 +486,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SaveDraft",
-                type: .unary
             )
         }
         /// Namespace for "GetDraft" metadata.
@@ -537,7 +498,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetDraft",
-                type: .unary
             )
         }
         /// Namespace for "DeleteDraft" metadata.
@@ -550,7 +510,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteDraft",
-                type: .unary
             )
         }
         /// Namespace for "GetMutedChats" metadata.
@@ -563,7 +522,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetMutedChats",
-                type: .unary
             )
         }
         /// Namespace for "SetMutedChat" metadata.
@@ -576,7 +534,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SetMutedChat",
-                type: .unary
             )
         }
         /// Namespace for "GetUserId" metadata.
@@ -589,7 +546,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetUserId",
-                type: .unary
             )
         }
         /// Namespace for "AddFavorite" metadata.
@@ -602,7 +558,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "AddFavorite",
-                type: .unary
             )
         }
         /// Namespace for "RemoveFavorite" metadata.
@@ -615,7 +570,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "RemoveFavorite",
-                type: .unary
             )
         }
         /// Namespace for "GetFavorites" metadata.
@@ -628,7 +582,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetFavorites",
-                type: .unary
             )
         }
         /// Namespace for "SaveFavoriteMessage" metadata.
@@ -641,7 +594,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "SaveFavoriteMessage",
-                type: .unary
             )
         }
         /// Namespace for "GetDevices" metadata.
@@ -654,7 +606,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetDevices",
-                type: .unary
             )
         }
         /// Namespace for "DeleteDevice" metadata.
@@ -667,7 +618,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteDevice",
-                type: .unary
             )
         }
         /// Namespace for "DeleteOtherDevices" metadata.
@@ -680,7 +630,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "DeleteOtherDevices",
-                type: .unary
             )
         }
         /// Namespace for "RequestPasswordReset" metadata.
@@ -693,7 +642,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "RequestPasswordReset",
-                type: .unary
             )
         }
         /// Namespace for "ResetPassword" metadata.
@@ -706,7 +654,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "ResetPassword",
-                type: .unary
             )
         }
         /// Namespace for "CreateSecretChat" metadata.
@@ -719,7 +666,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "CreateSecretChat",
-                type: .unary
             )
         }
         /// Namespace for "ExchangeSecretKey" metadata.
@@ -732,7 +678,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "ExchangeSecretKey",
-                type: .unary
             )
         }
         /// Namespace for "GetSecretChatKey" metadata.
@@ -745,7 +690,6 @@ internal enum Messenger_ChatService: Sendable {
             internal static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "messenger.ChatService"),
                 method: "GetSecretChatKey",
-                type: .unary
             )
         }
         /// Descriptors for all methods in the "messenger.ChatService" service.

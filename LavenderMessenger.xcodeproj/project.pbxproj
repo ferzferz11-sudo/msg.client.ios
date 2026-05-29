@@ -16,7 +16,7 @@
 		476D7B9AE55EF7C854AADC39 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */; };
 		4D761746D1FE9B883923EEA1 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E50FE60B1DCB9BCF9193DE2 /* CredentialStore.swift */; };
 		5A824C616FD9EBAE14572D93 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FFD2E19A89034CE7229A0E /* Models.swift */; };
-		638C6740A13D628D148B6630 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 884A433C7A1D10DB97B4E970 /* SwiftProtobuf */; };
+		638C6740A13D628D148B6630 /* GRPCProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = DA256B704E85AB63BECFBBCE /* GRPCProtobuf */; };
 		67E4D08F91233175C1FB2CDE /* ReplyPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2A61646573929E0AC516B /* ReplyPreviewView.swift */; };
 		6884E770824974980A575151 /* GRPCCore in Frameworks */ = {isa = PBXBuildFile; productRef = 76C2EED5D3D9AA45D2FD866E /* GRPCCore */; };
 		689B8A33F7524DB13DDCFA00 /* GRPCNIOTransportHTTP2 in Frameworks */ = {isa = PBXBuildFile; productRef = 809B56278BA8B58E27F16183 /* GRPCNIOTransportHTTP2 */; };
@@ -26,10 +26,11 @@
 		A7CA66F8DD2AFB3468ED35F7 /* messenger.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4FA89FE47CB6DC114005C1 /* messenger.grpc.swift */; };
 		BDA27F2978C885C4984324D4 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFD60542A06862B23E5A405 /* AuthViewModel.swift */; };
 		BE9EC52A0EE873CE20A9687F /* LavenderMessengerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3015FF3F2C4FDD845E831CD /* LavenderMessengerApp.swift */; };
-		C0BC71D1F932E21649E00709 /* GRPCProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = DA256B704E85AB63BECFBBCE /* GRPCProtobuf */; };
+		C0BC71D1F932E21649E00709 /* GRPCNIOTransportHTTP2Posix in Frameworks */ = {isa = PBXBuildFile; productRef = 2CC3D717C2C79E259F72A7DB /* GRPCNIOTransportHTTP2Posix */; };
 		C4203747382B8B296528167E /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F758126E0FAEB46C4CE9FBE /* MessageBubbleView.swift */; };
 		C445C708E4CAE1D30E3AC6FF /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F547C88EE6E2E5A614A99596 /* SettingsViews.swift */; };
 		EF28FC8432412B0A4991D2EA /* messenger.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAD89DECA491404BD61620B /* messenger.pb.swift */; };
+		F43AE6DBE05890637767338A /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 884A433C7A1D10DB97B4E970 /* SwiftProtobuf */; };
 		FF530BD58D4ACCBC9A2C207A /* GRPCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495F13475A80489C379BC4EF /* GRPCManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,8 +65,9 @@
 			files = (
 				6884E770824974980A575151 /* GRPCCore in Frameworks */,
 				689B8A33F7524DB13DDCFA00 /* GRPCNIOTransportHTTP2 in Frameworks */,
-				C0BC71D1F932E21649E00709 /* GRPCProtobuf in Frameworks */,
-				638C6740A13D628D148B6630 /* SwiftProtobuf in Frameworks */,
+				C0BC71D1F932E21649E00709 /* GRPCNIOTransportHTTP2Posix in Frameworks */,
+				638C6740A13D628D148B6630 /* GRPCProtobuf in Frameworks */,
+				F43AE6DBE05890637767338A /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +184,7 @@
 			packageProductDependencies = (
 				76C2EED5D3D9AA45D2FD866E /* GRPCCore */,
 				809B56278BA8B58E27F16183 /* GRPCNIOTransportHTTP2 */,
+				2CC3D717C2C79E259F72A7DB /* GRPCNIOTransportHTTP2Posix */,
 				DA256B704E85AB63BECFBBCE /* GRPCProtobuf */,
 				884A433C7A1D10DB97B4E970 /* SwiftProtobuf */,
 			);
@@ -275,7 +278,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lavender.LavenderMessenger;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.10;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -414,7 +417,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lavender.LavenderMessenger;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.10;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -478,6 +481,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2CC3D717C2C79E259F72A7DB /* GRPCNIOTransportHTTP2Posix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9F3CCC36C4B8B8F5DFEE345F /* XCRemoteSwiftPackageReference "grpc-swift-nio-transport" */;
+			productName = GRPCNIOTransportHTTP2Posix;
+		};
 		76C2EED5D3D9AA45D2FD866E /* GRPCCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9FAF4B10D75DDC9E2373143 /* XCRemoteSwiftPackageReference "grpc-swift" */;
