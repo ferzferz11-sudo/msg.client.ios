@@ -5,7 +5,7 @@ import Security
 
 /// Secure credential storage using the iOS Keychain.
 /// Matches Android's CredentialStore using EncryptedSharedPreferences.
-final class CredentialStore {
+final class CredentialStore: @unchecked Sendable {
 
     static let shared = CredentialStore()
 

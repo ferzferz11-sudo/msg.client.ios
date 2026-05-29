@@ -41,7 +41,7 @@ enum ServiceMarker: String {
 
 // MARK: - Crypto Manager
 
-final class CryptoManager {
+final class CryptoManager: @unchecked Sendable {
 
     static let shared = CryptoManager()
 
