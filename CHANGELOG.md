@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.2.0] - 2026-05-29
+## [0.2.0] - 2026-05-30
 
 ### Added
 - OSLog logging throughout GRPCManager
@@ -31,19 +31,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - TypingIndicatorView (animated typing indicator)
   - ReplyPreviewView (reply preview with cancel)
   - ChatInputAreaView (text input + send button)
-  - ImageViewerSheet (full-screen image viewer)
+- ImageViewerSheet (full-screen image viewer)
 - SettingsViews (ChatInfo, EditProfile, Security, Notifications, Appearance)
+- ContactsView
+- SettingsView
 
 ### Changed
 - **BREAKING**: Migrated from grpc-swift 1.x to 2.x
-  - `GRPCChannel` → `GRPCClient<HTTP2ClientTransport>`
-  - `GRPCChannelPool` → `withGRPCClient(transport:)`
+  - `GRPCChannel` → `GRPCClient<HTTP2ClientTransport.Posix>`
+  - `GRPCChannelPool` → direct client creation
   - `bidirectionalStreaming(request:descriptor:serializer:deserializer:)` API
+  - `unary(request:descriptor:serializer:deserializer:)` API
+- **BREAKING**: Minimum iOS version raised to 18.0 (required by grpc-swift 2.x)
 - Removed CommonCrypto dependency (CryptoManager now uses only CryptoKit)
 - Removed GRPCProtobufShim (using official `grpc-swift-protobuf` package)
-- ChatRoomView reduced from 797 to 120 lines (components extracted)
-- swift-tools-version bumped to 6.0
-- Package.swift: iOS-only platform target
+- Swift tools version bumped to 6.0
+- Package.swift: iOS 18.0+ platform target
 
 ### Removed
 - GRPCProtobufShim.swift (replaced by grpc-swift-protobuf package)
@@ -51,9 +54,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KeychainAccess SPM dependency (using native Security framework)
 
 ### Fixed
-- Placeholder.swift removed (was causing build errors)
-- AuthViewModel UIDevice references wrapped in `#if canImport(UIKit)`
-- Deprecated `navigationBarHidden` replaced with `.toolbar(.hidden)`
+- Build errors with grpc-swift 2.x API compatibility
+- Calendar.isToday/isYesterday not available in iOS 18 (use isDate(inSameDayAs:))
+- Timer deinit concurrency warning (added @unchecked Sendable)
+- Missing draft methods in GRPCManager
+- Missing FCMLogEntry type
+- Duplicate EditProfileView code in SettingsViews
 
 ---
 
@@ -61,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial project structure
-- Generated gRPC code from messenger.proto (messenger.pb.swift, messenger.grpc.swift)
+- Generated gRPC code from messenger.proto
 - GRPCManager with bidirectional streaming (stub)
 - CryptoManager: AES-256-GCM encryption matching server crypto.go
 - E2EE support: ECDH key exchange + HKDF key derivation
@@ -75,11 +81,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Xcode project via xcodegen
 
 ### Known Issues
-- GRPCChannel API may need adaptation for grpc-swift 2.x
-- ChatRoomView is 797 lines (needs refactoring)
+- GRPCChannel API needed adaptation for grpc-swift 2.x
+- ChatRoomView was 797 lines (needed refactoring)
 - No tests yet
-- CommonCrypto dependency needs replacement
-- Many unary RPC methods are stubs
+- CommonCrypto dependency needed replacement
+- Many unary RPC methods were stubs
 
 ---
 

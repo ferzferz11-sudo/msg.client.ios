@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		005A78CEDA3250C145FAB2AD /* ClientVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB91CFBA1D04757330B3B7C2 /* ClientVersion.swift */; };
 		0B49BF7ABE0B35E881069568 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748A83D5CD1F307E95376E59 /* ChatViewModel.swift */; };
 		15BEB4734BA905536BD7E5E6 /* CryptoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8D27FEC38CBFB98F76301E /* CryptoManager.swift */; };
 		2F33995318DFF172C4AC88DB /* ProtoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7CC0CEFAE915D2D534C526 /* ProtoUtils.swift */; };
@@ -49,6 +50,7 @@
 		AA58F8675415B4928E11E228 /* LavenderMessenger.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LavenderMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAD89DECA491404BD61620B /* messenger.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messenger.pb.swift; sourceTree = "<group>"; };
 		ABE0C066D562171066AFFCD1 /* TypingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingIndicatorView.swift; sourceTree = "<group>"; };
+		BB91CFBA1D04757330B3B7C2 /* ClientVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientVersion.swift; sourceTree = "<group>"; };
 		C3015FF3F2C4FDD845E831CD /* LavenderMessengerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LavenderMessengerApp.swift; sourceTree = "<group>"; };
 		C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
 		E40D5FA7BB9D7E649D423450 /* ChatInputAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputAreaView.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 		0E1DBEE865E9C13B8A56233B /* LavenderMessengerLib */ = {
 			isa = PBXGroup;
 			children = (
+				BB91CFBA1D04757330B3B7C2 /* ClientVersion.swift */,
 				8DD70EB1F1CC8ABE46426888 /* BusinessLayer */,
 				735278ED2A0CA3ED72FD2850 /* DataLayer */,
 				A71E0155823AD7D49F78D295 /* Generated */,
@@ -243,6 +246,7 @@
 				71700926DEA52A7392A2DB56 /* ChatListView.swift in Sources */,
 				476D7B9AE55EF7C854AADC39 /* ChatRoomView.swift in Sources */,
 				0B49BF7ABE0B35E881069568 /* ChatViewModel.swift in Sources */,
+				005A78CEDA3250C145FAB2AD /* ClientVersion.swift in Sources */,
 				4D761746D1FE9B883923EEA1 /* CredentialStore.swift in Sources */,
 				15BEB4734BA905536BD7E5E6 /* CryptoManager.swift in Sources */,
 				FF530BD58D4ACCBC9A2C207A /* GRPCManager.swift in Sources */,
