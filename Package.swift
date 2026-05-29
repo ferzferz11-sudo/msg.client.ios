@@ -12,7 +12,6 @@ let package = Package(
         .package(url: "https://github.com/grpc/grpc-swift.git", from: "2.1.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.28.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.70.0"),
-        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess.git", from: "4.2.2"),
     ],
     targets: [
         .target(
@@ -22,7 +21,6 @@ let package = Package(
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
             path: "Sources",
             sources: ["LavenderMessenger"]
