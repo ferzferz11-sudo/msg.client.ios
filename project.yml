@@ -45,3 +45,4 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     resources:
       - Assets.xcassets
+      - Sources/LavenderMessengerLib/Resources
