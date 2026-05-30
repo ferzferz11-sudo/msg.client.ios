@@ -63,6 +63,7 @@ final class GRPCManager: ObservableObject {
     private var currentDeviceId: String = ""
     private var currentDeviceName: String = ""
     private var isStreamAuthenticated: Bool = false
+    private var isConnecting: Bool = false
 
     private var grpcClient: GRPCClient<HTTP2ClientTransport.Posix>?
     private var eventLoopGroup: EventLoopGroup?
@@ -92,7 +93,12 @@ final class GRPCManager: ObservableObject {
         if currentServerHost == serverAddress && currentServerPort == port && connectionStatus == .ready && !forceReconnect {
             return
         }
+        if isConnecting && !forceReconnect {
+            logger.info("Already connecting, skipping duplicate call")
+            return
+        }
         reconnectTask?.cancel()
+        isConnecting = true
         currentServerHost = serverAddress
         currentServerPort = port
         connectionStatus = .connecting
@@ -111,6 +117,7 @@ final class GRPCManager: ObservableObject {
                 )
 
                 grpcClient = GRPCClient(transport: transport)
+                isConnecting = false
                 connectionStatus = .ready
                 logger.info("Connected to \(serverAddress):\(port)")
 
@@ -126,6 +133,7 @@ final class GRPCManager: ObservableObject {
                     )
                 }
             } catch {
+                isConnecting = false
                 connectionStatus = .failed
                 self.error = "Connection failed: \(error.localizedDescription)"
                 logger.info("Connection failed: \(error.localizedDescription)")

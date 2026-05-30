@@ -20,6 +20,7 @@ struct AuthView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 72, height: 72)
+                                .clipShape(Circle())
                         } else {
                             Image(systemName: "message.circle.fill")
                                 .font(.system(size: 72))
