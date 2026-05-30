@@ -108,7 +108,7 @@ final class GRPCManager: ObservableObject {
         Task {
             do {
                 logger.info("[GRPC] Connecting to \(serverAddress):\(port)...")
-                eventLoopGroup = try NIOSingletonEventLoopGroup()
+                eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
                 let transport = try HTTP2ClientTransport.Posix(
                     target: .ipv4(host: serverAddress, port: port),
