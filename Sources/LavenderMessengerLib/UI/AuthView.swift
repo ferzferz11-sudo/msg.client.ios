@@ -15,10 +15,16 @@ struct AuthView: View {
                 VStack(spacing: 24) {
                     // Logo area
                     VStack(spacing: 12) {
-                        Image("logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 72, height: 72)
+                        if let uiImage = UIImage(named: "logo") {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 72, height: 72)
+                        } else {
+                            Image(systemName: "message.circle.fill")
+                                .font(.system(size: 72))
+                                .foregroundStyle(.purple.gradient)
+                        }
 
                         Text("Lava Messenger")
                             .font(.title.bold())
