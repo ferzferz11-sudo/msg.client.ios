@@ -1,4 +1,4 @@
-# Lavender Messenger — iOS Client
+# Lava Messenger — iOS Client
 
 > **A secure messaging application** — SwiftUI + gRPC + AES-256 encryption
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Lavender Messenger is a cross-platform secure messaging application. This is the **iOS client**, built with **SwiftUI** and **gRPC** for real-time bidirectional messaging.
+Lava Messenger is a cross-platform secure messaging application. This is the **iOS client**, built with **SwiftUI** and **gRPC** for real-time bidirectional messaging.
 
 ### Architecture
 
@@ -143,7 +143,7 @@ Default server: `13.140.25.249:50051` (editable in auth screen).
 
 ## Protocol
 
-The client communicates with the Lavender Messenger Go server via **gRPC** using a single bidirectional stream for messaging:
+The client communicates with the Lava Messenger Go server via **gRPC** using a single bidirectional stream for messaging:
 
 ```
 Client                              Server

@@ -15,11 +15,13 @@ struct AuthView: View {
                 VStack(spacing: 24) {
                     // Logo area
                     VStack(spacing: 12) {
-                        Image(systemName: "message.circle.fill")
-                            .font(.system(size: 72))
-                            .foregroundStyle(.purple.gradient)
+                        Image("logo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 72, height: 72)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
 
-                        Text("Lavender Messenger")
+                        Text("Lava Messenger")
                             .font(.title.bold())
                             .foregroundStyle(.primary)
 

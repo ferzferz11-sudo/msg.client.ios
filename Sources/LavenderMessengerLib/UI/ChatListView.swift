@@ -54,7 +54,7 @@ struct ChatListView: View {
                     chatList
                 }
             }
-            .navigationTitle("Lavender")
+            .navigationTitle("Lava")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
