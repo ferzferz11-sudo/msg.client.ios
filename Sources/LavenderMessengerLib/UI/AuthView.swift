@@ -239,6 +239,8 @@ struct FormField: View {
                 SecureField(placeholder, text: $text)
             } else {
                 TextField(placeholder, text: $text)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
             }
         }
         .padding(14)
