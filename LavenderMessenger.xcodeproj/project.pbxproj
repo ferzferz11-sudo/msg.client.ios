@@ -33,9 +33,6 @@
 		C445C708E4CAE1D30E3AC6FF /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F547C88EE6E2E5A614A99596 /* SettingsViews.swift */; };
 		EF28FC8432412B0A4991D2EA /* messenger.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAD89DECA491404BD61620B /* messenger.pb.swift */; };
 		FF530BD58D4ACCBC9A2C207A /* GRPCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495F13475A80489C379BC4EF /* GRPCManager.swift */; };
-		9DC7EFA1B28FE170E4AD1E80 /* AppIcon.appiconset in Resources */ = {isa = PBXBuildFile; fileRef = 98B000B982B83FE71B226E5A /* AppIcon.appiconset */; };
-		F4F6AD0341FC5DF6A4BCB04E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0B8CBB8F412DE1E99B7E144 /* Assets.xcassets */; };
-		0BCE14BDFAD642B9525A4458 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BF15648579D039532340C1 /* logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,11 +59,7 @@
 		FB8AC52B09D5D87E910C534B /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		FC7CC0CEFAE915D2D534C526 /* ProtoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoUtils.swift; sourceTree = "<group>"; };
 		FED62050C6F89DD5C59CCC6E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
-		D0B8CBB8F412DE1E99B7E144 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D1F023271C0B6A4E2448EE81 /* Logo.imageset */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = logo.imageset; path = Assets.xcassets/logo.imageset; sourceTree = "<group>"; };
-		98B000B982B83FE71B226E5A /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets/AppIcon.appiconset"; sourceTree = "<group>"; };
-		25BF15648579D039532340C1 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "Assets.xcassets/logo.imageset/logo.png"; sourceTree = "<group>"; };
-	/* End PBXFileReference section */
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D36886A4AA8DF0859D2DB4CA /* Frameworks */ = {
@@ -165,7 +158,6 @@
 				C3015FF3F2C4FDD845E831CD /* LavenderMessengerApp.swift */,
 				0E1DBEE865E9C13B8A56233B /* LavenderMessengerLib */,
 				2A7FC04189C66CD584EF0B1C /* Products */,
-				D0B8CBB8F412DE1E99B7E144 /* Assets.xcassets */,
 			);
 			sourceTree = "<group>";
 		};
@@ -178,18 +170,6 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
-
-/* Begin Assets catalog group section */
-		0D34CAE1E1F715575F3DE3B0 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				98B000B982B83FE71B226E5A /* AppIcon.appiconset */,
-				D1F023271C0B6A4E2448EE81 /* Logo.imageset */,
-			);
-			name = Assets;
-			sourceTree = "<group>";
-		};
-/* End Assets catalog group section */
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -199,7 +179,6 @@
 			buildPhases = (
 				E81D0EFCC5F702D60B844A27 /* Sources */,
 				D36886A4AA8DF0859D2DB4CA /* Frameworks */,
-				E81D0EFCC5F702D60B844A27_Res /* Resources */,
 			);
 			buildRules = (
 			);
@@ -285,19 +264,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-
-/* Begin PBXResourcesBuildPhase section */
-		E81D0EFCC5F702D60B844A27_Res /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9DC7EFA1B28FE170E4AD1E80 /* AppIcon.appiconset in Resources */,
-				F4F6AD0341FC5DF6A4BCB04E /* Assets.xcassets in Resources */,
-				0BCE14BDFAD642B9525A4458 /* logo.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
