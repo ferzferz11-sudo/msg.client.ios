@@ -20,6 +20,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1] - 2026-05-30
+
+### Added
+- App logo from Android client (app_logo.png)
+- Logo displayed in AuthView with circular clip shape
+- gen.sh script for easy xcodegen rebuild + commit/push
+- isConnecting guard to prevent duplicate GRPC connections
+
+### Changed
+- Branding: "Lavender Messenger" → "Lava Messenger" in UI strings
+- Logo loaded from bundle via UIImage(named:) instead of Asset Catalog
+
+### Fixed
+- Autocapitalization and autocorrection disabled on login TextField
+- Duplicate GRPC connect() calls causing stream cancellation
+- Logo Asset Catalog issues (moved to Resources/ folder for xcodegen compatibility)
+
+### Known Issues
+- GRPC connection does not work in iOS Simulator (NIO raw sockets restriction)
+- Works on real device
+
+---
+
 ## [0.2.0] - 2026-05-30
 
 ### Added
@@ -89,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/ferzferz11-sudo/msg.client.ios/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ferzferz11-sudo/msg.client.ios/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/ferzferz11-sudo/msg.client.ios/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/ferzferz11-sudo/msg.client.ios/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ferzferz11-sudo/msg.client.ios/releases/tag/v0.1.0
