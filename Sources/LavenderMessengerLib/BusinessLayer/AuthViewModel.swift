@@ -165,11 +165,7 @@ final class AuthViewModel: ObservableObject {
             showErrorAlert("Passwords do not match")
             return false
         }
-        if email.isEmpty {
-            showErrorAlert("Email is required for registration")
-            return false
-        }
-        if !email.contains("@") {
+        if !email.isEmpty && !email.contains("@") {
             showErrorAlert("Invalid email address")
             return false
         }
