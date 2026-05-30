@@ -63,9 +63,9 @@
 		FC7CC0CEFAE915D2D534C526 /* ProtoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtoUtils.swift; sourceTree = "<group>"; };
 		FED62050C6F89DD5C59CCC6E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		D0B8CBB8F412DE1E99B7E144 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D1F023271C0B6A4E2448EE81 /* Logo.imageset */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Logo.imageset; path = Assets.xcassets/Logo.imageset; sourceTree = "<group>"; };
+		D1F023271C0B6A4E2448EE81 /* Logo.imageset */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = logo.imageset; path = Assets.xcassets/logo.imageset; sourceTree = "<group>"; };
 		98B000B982B83FE71B226E5A /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets/AppIcon.appiconset"; sourceTree = "<group>"; };
-		25BF15648579D039532340C1 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "Assets.xcassets/Logo.imageset/logo.png"; sourceTree = "<group>"; };
+		25BF15648579D039532340C1 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = "Assets.xcassets/logo.imageset/logo.png"; sourceTree = "<group>"; };
 	/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
