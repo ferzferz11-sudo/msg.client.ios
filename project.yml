@@ -44,4 +44,4 @@ targets:
         CODE_SIGN_STYLE: "Automatic"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     resources:
-      - Assets.xcassets
+      - path: Assets.xcassets
