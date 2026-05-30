@@ -216,8 +216,8 @@ final class GRPCManager: ObservableObject {
                         try await writer.write(authMessage)
                     },
                     descriptor: Messenger_ChatService.Method.Chat.descriptor,
-                    serializer: ProtobufSerializer<Messenger_Message>(),
-                    deserializer: ProtobufDeserializer<Messenger_Message>(),
+                    serializer: .protocGRPC,
+                    deserializer: .protocGRPC,
                     options: .defaults
                 ) { response in
                     for try await message in response.messages {
@@ -237,7 +237,7 @@ final class GRPCManager: ObservableObject {
 
     func sendMessage(_ message: Message) {
         DispatchQueue.main.async { [weak self] in self?.messages.append(message) }
-        let protoMsg = ProtoUtils.messageToProto(message)
+        _ = ProtoUtils.messageToProto(message)
         // TODO: Send via bidirectional stream
     }
 
@@ -281,8 +281,8 @@ final class GRPCManager: ObservableObject {
                 let response = try await client.unary(
                     request: ClientRequest(message: request),
                     descriptor: Messenger_ChatService.Method.GetHistory.descriptor,
-                    serializer: ProtobufSerializer<Messenger_GetHistoryRequest>(),
-                    deserializer: ProtobufDeserializer<Messenger_GetHistoryResponse>(),
+                    serializer: .protocGRPC,
+                    deserializer: .protocGRPC,
                     options: .defaults
                 ) { response in
                     return try response.message.messages
