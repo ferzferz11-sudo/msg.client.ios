@@ -14,6 +14,7 @@
 		2FDCECDE824DD870BA7FADE6 /* ImageViewerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD01D400DEA560CA3FA0EDA /* ImageViewerSheet.swift */; };
 		34B0772D259F60EC4820D29E /* TypingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE0C066D562171066AFFCD1 /* TypingIndicatorView.swift */; };
 		3A86FF508AC1EAFA71DCA4C4 /* ChatInputAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D5FA7BB9D7E649D423450 /* ChatInputAreaView.swift */; };
+		3FDEC0F8FA85ECA69B9DC71E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0C871CCC9163FE7D5C0A06 /* logo.png */; };
 		476D7B9AE55EF7C854AADC39 /* ChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C721C3CB98589DBDEB09C4B1 /* ChatRoomView.swift */; };
 		4D761746D1FE9B883923EEA1 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E50FE60B1DCB9BCF9193DE2 /* CredentialStore.swift */; };
 		50C1FCC144A51CD48E0B5E57 /* ChatInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89EF7EE11838FEC4B17F4CD /* ChatInfoView.swift */; };
@@ -41,6 +42,7 @@
 		2CD01D400DEA560CA3FA0EDA /* ImageViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerSheet.swift; sourceTree = "<group>"; };
 		48FFD2E19A89034CE7229A0E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		495F13475A80489C379BC4EF /* GRPCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRPCManager.swift; sourceTree = "<group>"; };
+		5E0C871CCC9163FE7D5C0A06 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		6E881EE740CEA32B455ADD7B /* ReactionPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionPickerView.swift; sourceTree = "<group>"; };
 		6F758126E0FAEB46C4CE9FBE /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
 		748A83D5CD1F307E95376E59 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				735278ED2A0CA3ED72FD2850 /* DataLayer */,
 				A71E0155823AD7D49F78D295 /* Generated */,
 				88B55CBCD785BAFE1D6FFA36 /* Models */,
+				4D3A1BC3B61FC2EE317FE17C /* Resources */,
 				7F26F4689E78F06685E82DC4 /* UI */,
 			);
 			name = LavenderMessengerLib;
@@ -96,6 +99,14 @@
 				AA58F8675415B4928E11E228 /* LavenderMessenger.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4D3A1BC3B61FC2EE317FE17C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5E0C871CCC9163FE7D5C0A06 /* logo.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		735278ED2A0CA3ED72FD2850 /* DataLayer */ = {
@@ -178,6 +189,7 @@
 			buildConfigurationList = 072B250619ECC763A31F8072 /* Build configuration list for PBXNativeTarget "LavenderMessenger" */;
 			buildPhases = (
 				E81D0EFCC5F702D60B844A27 /* Sources */,
+				D5E72255F1DA875A6BDEFD05 /* Resources */,
 				D36886A4AA8DF0859D2DB4CA /* Frameworks */,
 			);
 			buildRules = (
@@ -233,6 +245,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D5E72255F1DA875A6BDEFD05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FDEC0F8FA85ECA69B9DC71E /* logo.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E81D0EFCC5F702D60B844A27 /* Sources */ = {
