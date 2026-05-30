@@ -216,8 +216,8 @@ final class GRPCManager: ObservableObject {
                         try await writer.write(authMessage)
                     },
                     descriptor: Messenger_ChatService.Method.Chat.descriptor,
-                    serializer: .protocGRPC,
-                    deserializer: .protocGRPC,
+                    serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
+                    deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>(),
                     options: .defaults
                 ) { response in
                     for try await message in response.messages {
@@ -281,8 +281,8 @@ final class GRPCManager: ObservableObject {
                 let response = try await client.unary(
                     request: ClientRequest(message: request),
                     descriptor: Messenger_ChatService.Method.GetHistory.descriptor,
-                    serializer: .protocGRPC,
-                    deserializer: .protocGRPC,
+                    serializer: GRPCProtobuf.ProtobufSerializer<Messenger_GetHistoryRequest>(),
+                    deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_GetHistoryResponse>(),
                     options: .defaults
                 ) { response in
                     return try response.message.messages
