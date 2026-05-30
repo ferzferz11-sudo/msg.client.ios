@@ -101,20 +101,12 @@ final class GRPCManager: ObservableObject {
 
         Task {
             do {
-                print("[GRPC] Connecting to \(serverAddress):\(port)...")
+                logger.info("[GRPC] Connecting to \(serverAddress):\(port)...")
                 eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
-                let transportSecurity: HTTP2ClientTransport.Posix.TransportSecurity
-                if useTLS {
-                    transportSecurity = .tls(.defaults)
-                } else {
-                    transportSecurity = .plaintext
-                }
-
-                // Create transport with timeout
                 let transport = try HTTP2ClientTransport.Posix(
                     target: .ipv4(host: serverAddress, port: port),
-                    transportSecurity: transportSecurity,
+                    transportSecurity: .plaintext,
                     eventLoopGroup: eventLoopGroup!
                 )
 
@@ -136,7 +128,7 @@ final class GRPCManager: ObservableObject {
             } catch {
                 connectionStatus = .failed
                 self.error = "Connection failed: \(error.localizedDescription)"
-                logger.error("Connection failed: \(error.localizedDescription)")
+                logger.info("Connection failed: \(error.localizedDescription)")
                 scheduleReconnect()
             }
         }
@@ -212,32 +204,32 @@ final class GRPCManager: ObservableObject {
         chatTask = Task { [weak self] in
             guard let self = self else { return }
             do {
-                print("[GRPC] Starting chat stream to \(self.currentServerHost):\(self.currentServerPort)")
-                print("[GRPC] Auth message: user=\(authMessage.user), room=\(authMessage.roomID), device=\(authMessage.deviceID)")
+                logger.info("[GRPC] Starting chat stream to \(self.currentServerHost):\(self.currentServerPort)")
+                logger.info("[GRPC] Auth message: user=\(authMessage.user), room=\(authMessage.roomID), device=\(authMessage.deviceID)")
                 try await self.grpcClient!.bidirectionalStreaming(
                     request: StreamingClientRequest(of: Messenger_Message.self) { writer in
-                        print("[GRPC] Writing auth message...")
+                        logger.info("[GRPC] Writing auth message...")
                         try await writer.write(authMessage)
-                        print("[GRPC] Auth message written")
+                        logger.info("[GRPC] Auth message written")
                     },
                     descriptor: Messenger_ChatService.Method.Chat.descriptor,
                     serializer: GRPCProtobuf.ProtobufSerializer<Messenger_Message>(),
                     deserializer: GRPCProtobuf.ProtobufDeserializer<Messenger_Message>(),
                     options: .defaults
                 ) { response in
-                    print("[GRPC] Stream opened, waiting for messages...")
+                    logger.info("[GRPC] Stream opened, waiting for messages...")
                     for try await message in response.messages {
-                        print("[GRPC] Received: \(message.text)")
+                        logger.info("[GRPC] Received: \(message.text)")
                         await self.handleIncomingProtoMessage(message)
                     }
                 }
-                print("[GRPC] Stream ended normally")
+                logger.info("[GRPC] Stream ended normally")
             } catch is CancellationError {
-                print("[GRPC] Chat stream cancelled")
-                logger.debug("Chat stream cancelled")
+                logger.info("[GRPC] Chat stream cancelled")
+                logger.info("Chat stream cancelled")
             } catch {
-                print("[GRPC] Stream error: \(error)")
-                logger.error("Chat stream error: \(error.localizedDescription)")
+                logger.info("[GRPC] Stream error: \(error)")
+                logger.info("Chat stream error: \(error.localizedDescription)")
                 Task { @MainActor in self.handleStreamError(error) }
             }
         }
@@ -301,7 +293,7 @@ final class GRPCManager: ObservableObject {
                     await handleIncomingProtoMessage(protoMsg)
                 }
             } catch {
-                logger.error("Failed to load history: \(error.localizedDescription)")
+                logger.info("Failed to load history: \(error.localizedDescription)")
             }
             completion()
         }
@@ -429,7 +421,7 @@ final class GRPCManager: ObservableObject {
         connectionStatus = .failed
         self.error = "Stream error: \(error.localizedDescription)"
         isStreamAuthenticated = false
-        logger.error("Stream error: \(error.localizedDescription)")
+        logger.info("Stream error: \(error.localizedDescription)")
         scheduleReconnect()
     }
 }
