@@ -2,7 +2,9 @@ import Foundation
 import SwiftProtobuf
 import GRPCCore
 import GRPCProtobuf
-import GRPCTransportApple
+import GRPCNIOTransportHTTP2Posix
+import NIOCore
+import NIOPosix
 import OSLog
 
 #if canImport(UIKit)
@@ -63,8 +65,8 @@ final class GRPCManager: ObservableObject {
     private var isStreamAuthenticated: Bool = false
     private var isConnecting: Bool = false
 
-    private var grpcClient: GRPCClient<HTTP2ClientTransport.URLSession>?
-    private var eventLoopGroup: Never?
+    private var grpcClient: GRPCClient<HTTP2ClientTransport.Posix>?
+    private var eventLoopGroup: EventLoopGroup?
     private var chatTask: Task<Void, Never>?
     private var typingTask: Task<Void, Never>?
     private var reconnectTask: Task<Void, Never>?
@@ -106,10 +108,12 @@ final class GRPCManager: ObservableObject {
         Task {
             do {
                 logger.info("[GRPC] Connecting to \(serverAddress):\(port)...")
+                eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
-                let transport = try HTTP2ClientTransport.URLSession(
-                    target: URL(string: "http://\(serverAddress):\(port)")!,
-                    configuration: URLSessionConfiguration.default
+                let transport = try HTTP2ClientTransport.Posix(
+                    target: .ipv4(host: serverAddress, port: port),
+                    transportSecurity: .plaintext,
+                    eventLoopGroup: eventLoopGroup!
                 )
 
                 grpcClient = GRPCClient(transport: transport)
@@ -155,6 +159,8 @@ final class GRPCManager: ObservableObject {
         reconnectTask?.cancel()
         grpcClient?.beginGracefulShutdown()
         grpcClient = nil
+        try? eventLoopGroup?.syncShutdownGracefully()
+        eventLoopGroup = nil
         connectionStatus = .disconnected
         isStreamAuthenticated = false
         currentRoomId = ""
