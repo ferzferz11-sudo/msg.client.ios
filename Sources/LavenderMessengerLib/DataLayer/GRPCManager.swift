@@ -99,42 +99,45 @@ final class GRPCManager: ObservableObject {
         error = nil
         isSuperAdmin = false
 
-        do {
-            eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        Task {
+            do {
+                eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
-            let transportSecurity: HTTP2ClientTransport.Posix.TransportSecurity
-            if useTLS {
-                transportSecurity = .tls(.defaults)
-            } else {
-                transportSecurity = .plaintext
-            }
+                let transportSecurity: HTTP2ClientTransport.Posix.TransportSecurity
+                if useTLS {
+                    transportSecurity = .tls(.defaults)
+                } else {
+                    transportSecurity = .plaintext
+                }
 
-            let transport = try HTTP2ClientTransport.Posix(
-                target: .ipv4(host: serverAddress, port: port),
-                transportSecurity: transportSecurity,
-                eventLoopGroup: eventLoopGroup!
-            )
-
-            grpcClient = GRPCClient(transport: transport)
-            connectionStatus = .ready
-            logger.info("Connected to \(serverAddress):\(port)")
-
-            if !currentUsername.isEmpty {
-                startChat(
-                    username: currentUsername,
-                    password: currentPassword,
-                    joinMessage: "",
-                    register: false,
-                    email: "",
-                    deviceId: currentDeviceId,
-                    deviceName: currentDeviceName
+                // Create transport with timeout
+                let transport = try HTTP2ClientTransport.Posix(
+                    target: .ipv4(host: serverAddress, port: port),
+                    transportSecurity: transportSecurity,
+                    eventLoopGroup: eventLoopGroup!
                 )
+
+                grpcClient = GRPCClient(transport: transport)
+                connectionStatus = .ready
+                logger.info("Connected to \(serverAddress):\(port)")
+
+                if !currentUsername.isEmpty {
+                    startChat(
+                        username: currentUsername,
+                        password: currentPassword,
+                        joinMessage: "",
+                        register: false,
+                        email: "",
+                        deviceId: currentDeviceId,
+                        deviceName: currentDeviceName
+                    )
+                }
+            } catch {
+                connectionStatus = .failed
+                self.error = "Connection failed: \(error.localizedDescription)"
+                logger.error("Connection failed: \(error.localizedDescription)")
+                scheduleReconnect()
             }
-        } catch {
-            connectionStatus = .failed
-            self.error = "Connection failed: \(error.localizedDescription)"
-            logger.error("Connection failed: \(error.localizedDescription)")
-            scheduleReconnect()
         }
     }
 
