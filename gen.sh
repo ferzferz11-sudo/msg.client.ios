@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-cd /root/msg.client.ios
-
 echo "=== 1. Clean old xcodeproj ==="
 rm -rf LavenderMessenger.xcodeproj
 
