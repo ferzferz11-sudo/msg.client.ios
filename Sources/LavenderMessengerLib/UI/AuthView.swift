@@ -19,7 +19,6 @@ struct AuthView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 72, height: 72)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
 
                         Text("Lava Messenger")
                             .font(.title.bold())
