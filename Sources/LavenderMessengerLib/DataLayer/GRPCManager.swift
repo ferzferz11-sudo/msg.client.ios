@@ -233,8 +233,10 @@ final class GRPCManager: ObservableObject {
                 }
                 print("[GRPC] Stream ended normally")
             } catch is CancellationError {
+                print("[GRPC] Chat stream cancelled")
                 logger.debug("Chat stream cancelled")
             } catch {
+                print("[GRPC] Stream error: \(error)")
                 logger.error("Chat stream error: \(error.localizedDescription)")
                 Task { @MainActor in self.handleStreamError(error) }
             }
